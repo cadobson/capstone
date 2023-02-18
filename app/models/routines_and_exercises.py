@@ -64,19 +64,23 @@ class RoutineExercise(db.Model):
         add_prefix_for_prod("routines.id")), nullable=False)
     exercise_id = db.Column(db.Integer, db.ForeignKey(
         add_prefix_for_prod("exercises.id")), nullable=False)
-    sets_reps_array = db.Column(db.ARRAY(db.Integer), nullable=False)
+    # sqlite3 does not support arrays, so encode as string
+    sets_reps_array = db.Column(db.String(10000), nullable=False)
     instructions = db.Column(db.String(10000), nullable=True)
 
-    routine = db.relationship("Routine", back_populates="routine_exercises")
-    exercise = db.relationship("Exercise", back_populates="routine_exercises")
 
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'routine_id': self.routine_id,
-            'exercise_id': self.exercise_id,
-            'order': self.order,
-            'sets': self.sets,
-            'reps': self.reps,
-            'weight': self.weight
-        }
+
+routine = db.relationship("Routine", back_populates="routine_exercises")
+exercise = db.relationship("Exercise", back_populates="routine_exercises")
+
+
+def to_dict(self):
+    return {
+        'id': self.id,
+        'routine_id': self.routine_id,
+        'exercise_id': self.exercise_id,
+        'order': self.order,
+        'sets': self.sets,
+        'reps': self.reps,
+        'weight': self.weight
+    }
