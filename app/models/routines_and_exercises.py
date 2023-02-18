@@ -16,6 +16,7 @@ class Exercise(db.Model):
         add_prefix_for_prod("users.id")), nullable=False)
 
     creator = db.relationship("User", back_populates="exercises")
+    routines = db.relationship("RoutineExercise", back_populates="exercises")
 
     def to_dict(self):
         return {
@@ -42,6 +43,7 @@ class Routine(db.Model):
         add_prefix_for_prod("users.id")), nullable=False)
 
     creator = db.relationship("User", back_populates="routines")
+    exercises = db.relationship("RoutineExercise", back_populates="routines")
 
     def to_dict(self):
         return {
@@ -68,6 +70,8 @@ class RoutineExercise(db.Model):
     sets_reps_array = db.Column(db.String(10000), nullable=False)
     instructions = db.Column(db.String(10000), nullable=True)
 
+    routines = db.relationship("Routine", back_populates="exercises")
+    exercises = db.relationship("Exercise", back_populates="routines")
 
 
 routine = db.relationship("Routine", back_populates="routine_exercises")
