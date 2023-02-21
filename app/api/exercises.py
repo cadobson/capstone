@@ -1,4 +1,6 @@
 from flask import Blueprint, jsonify, session, request
+from app.api.auth_routes import validation_errors_to_error_messages
+from app.forms.exercise_form import ExerciseForm
 from app.models import db, Exercise, User
 from sqlalchemy.orm import joinedload
 from flask_login import current_user
@@ -48,19 +50,28 @@ def get_exercise(id):
 
 @exercise_routes.route('/', methods=['POST'])
 def create_exercise():
-    if current_user.is_authenticated:
+    if not current_user.is_authenticated:
+        return {'errors': ['Unauthorized']}
+
+    form = ExerciseForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+    if form.validate_on_submit():
         data = request.get_json()
 
         exercise = Exercise(
             name=data['name'],
             description=data['description'],
             creator_id=current_user.id,
-            public=data['public']
+            public=False,
+            motion_img_url=None
         )
 
         db.session.add(exercise)
         db.session.commit()
-
         return exercise.to_dict()
-    return {'errors': ['Unauthorized']}
 
+    return {
+        "statusCode": 400,
+        "message": "Bad request",
+        'errors': validation_errors_to_error_messages(form.errors)
+    }, 400
