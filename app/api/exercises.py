@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, session, request
 from app.api.auth_routes import validation_errors_to_error_messages
-from app.forms.exercise_form import ExerciseForm
+from app.forms.exercise_form import CreateExerciseForm, EditExerciseForm
 from app.models import db, Exercise, User
 from sqlalchemy.orm import joinedload
 from flask_login import current_user
@@ -17,7 +17,7 @@ def get_exercises_current_user():
         exercises = Exercise.query.filter(
             Exercise.creator_id == current_user.id).all()
         return jsonify([exercise.to_dict() for exercise in exercises])
-    return {'errors': ['Unauthorized']}
+    return {'errors': ['Unauthorized']}, 401
 
 # Get all exercises which are marked public
 
@@ -43,7 +43,7 @@ def get_exercise(id):
 
     if exercise.public == True or exercise.creator_id == current_user.id:
         return exercise.to_dict()
-    return {'errors': ['Unauthorized']}
+    return {'errors': ['Unauthorized']}, 401
 
 # Create a new exercise
 
@@ -51,9 +51,9 @@ def get_exercise(id):
 @exercise_routes.route('/', methods=['POST'])
 def create_exercise():
     if not current_user.is_authenticated:
-        return {'errors': ['Unauthorized']}
+        return {'errors': ['Unauthorized']}, 401
 
-    form = ExerciseForm()
+    form = CreateExerciseForm()
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
         data = request.get_json()
@@ -67,6 +67,44 @@ def create_exercise():
         )
 
         db.session.add(exercise)
+        db.session.commit()
+        return exercise.to_dict()
+
+    return {
+        "statusCode": 400,
+        "message": "Bad request",
+        'errors': validation_errors_to_error_messages(form.errors)
+    }, 400
+
+# Update an exercise
+
+
+@exercise_routes.route('/<int:id>', methods=['PUT'])
+def update_exercise(id):
+    if not current_user.is_authenticated:
+        return {'errors': ['Unauthorized']}, 401
+
+    exercise = Exercise.query.filter(Exercise.id == id).first()
+
+    if not exercise:
+        return {
+            'errors': ['Exercise not found'],
+            "statusCode": 404,
+            'message': "Exercise not found"
+        }, 404
+
+    if exercise.creator_id != current_user.id:
+        return {'errors': ['Unauthorized']}, 401
+
+    form = EditExerciseForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+    if form.validate_on_submit():
+        data = request.get_json()
+
+        exercise.name = data['name']
+        exercise.description = data['description']
+        exercise.motion_img_url = data.get('motion_img_url')
+
         db.session.commit()
         return exercise.to_dict()
 
