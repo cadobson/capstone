@@ -113,3 +113,28 @@ def update_exercise(id):
         "message": "Bad request",
         'errors': validation_errors_to_error_messages(form.errors)
     }, 400
+
+
+# Delete an exercise
+
+
+@exercise_routes.route('/<int:id>', methods=['DELETE'])
+def delete_exercise(id):
+    if not current_user.is_authenticated:
+        return {'errors': ['Unauthorized']}, 401
+
+    exercise = Exercise.query.filter(Exercise.id == id).first()
+
+    if not exercise:
+        return {
+            'errors': ['Exercise not found'],
+            "statusCode": 404,
+            'message': "Exercise not found"
+        }, 404
+
+    if exercise.creator_id != current_user.id:
+        return {'errors': ['Unauthorized']}, 401
+
+    db.session.delete(exercise)
+    db.session.commit()
+    return {'message': 'Exercise deleted'}
