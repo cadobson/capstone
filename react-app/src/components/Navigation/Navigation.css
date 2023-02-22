@@ -12,10 +12,11 @@
   border-bottom: 1px solid #ddd;
   background-color: white;
   display: flex;
+  justify-content: center;
   height:40px;
 }
 
-.nav-holder>a, .nav-holder>.logout-text {
+.nav-holder>a {
   padding: 10px;
   color: rgb(33, 33, 33);
   transition: all 0.1s ease;
@@ -24,6 +25,23 @@
   font-size: 30px;
 }
 
-.nav-holder>a:hover, .nav-holder>.logout-text:hover {
+.nav-session-buttons {
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: inline;
+  margin: 0;
+  padding: 10px;
+  color:rgb(33, 33, 33);
+  transition: all 0.1s ease;
+  font-weight: 600;
+  font-size: 30px;
+}
+
+.nav-holder>a:hover, .nav-session-buttons:hover {
   color: rgb(169, 169, 169);
+  cursor: pointer;
 }
