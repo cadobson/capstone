@@ -1,1 +1,11 @@
-/* TODO Add site wide styles */
+.main-container {
+  border: solid black 1px;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.main-content {
+  border: solid red 1px;
+  width: 800px;
+}

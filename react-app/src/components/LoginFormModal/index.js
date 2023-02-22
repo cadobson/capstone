@@ -21,9 +21,16 @@ function LoginFormModal() {
     }
   };
 
+  const handleLoginDemo = async (e) => {
+    e.preventDefault()
+    setEmail("demo@aa.io")
+    setPassword("password")
+  }
+
   return (
     <>
       <h1>Log In</h1>
+      <button onClick={handleLoginDemo}>Fill Demo User Credentials</button>
       <form onSubmit={handleSubmit}>
         <ul>
           {errors.map((error, idx) => (
