@@ -13,11 +13,11 @@
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
 }
 
-.exercise-block-description, .exercise-block-preview-img {
+.exercise-block-text, .exercise-block-preview-img {
   /* border: solid red 1px; */
 }
 
-.exercise-block-description {
+.exercise-block-text {
   width: 100%;
   margin-left: 16px;
   white-space: pre-line;
