@@ -2,9 +2,11 @@ import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { useDispatch } from "react-redux"
 import { getPrivateExercises, getPublicExercises } from "../../store/exercises"
+import ExerciseBlock from "./ExerciseBlock"
+import "./ExerciseBlock.css"
 
 const Exercises = () => {
-  const questionData = useSelector(state => state.exercises.questions)
+  const exercisesData = useSelector(state => state.exercises)
   const [isLoaded, setIsLoaded] = useState(false)
   const currentSessionUser = useSelector(state => state.session.user)
   const [showPrivateHeader, setShowPrivateHeader] = useState(false)
@@ -13,6 +15,7 @@ const Exercises = () => {
 
   useEffect(() => {
     dispatch(getPublicExercises())
+    .then(() => {console.log("data from backend: ", exercisesData)})
     .then(() => {setIsLoaded(true)})
   }, [dispatch])
 
@@ -48,6 +51,11 @@ const Exercises = () => {
           <h2>Public Exercises</h2>
         </>
       )}
+      <div className="exercises-container">
+        {isLoaded && exercisesData.map((exercise) => {
+          return <ExerciseBlock exercise={exercise} key={exercise.id} />
+        })}
+      </div>
     </>
   )
 }
