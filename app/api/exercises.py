@@ -16,7 +16,7 @@ def get_exercises_current_user():
     if current_user.is_authenticated:
         exercises = Exercise.query.filter(
             Exercise.creator_id == current_user.id).all()
-        return jsonify([exercise.to_dict() for exercise in exercises])
+        return jsonify({"Exercises": [exercise.to_dict() for exercise in exercises]})
     return {'errors': ['Unauthorized']}, 401
 
 # Get all exercises which are marked public
@@ -25,7 +25,7 @@ def get_exercises_current_user():
 @exercise_routes.route('/public', methods=['GET'])
 def get_exercises_public():
     exercises = Exercise.query.filter(Exercise.public == True).all()
-    return jsonify([exercise.to_dict() for exercise in exercises])
+    return jsonify({"Exercises": [exercise.to_dict() for exercise in exercises]})
 
 # Get an exercise by id, but only if it is public or belongs to the current user
 
