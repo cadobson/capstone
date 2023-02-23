@@ -44,6 +44,13 @@ const Exercises = () => {
         <>
           <h2>Private Exercises</h2>
           <div>Only you can see these</div>
+          {isLoaded && exercisesData.length === 0 && (
+            <div>
+              You don't have any exercises yet. Consider creating some!
+            </div>
+          )
+
+          }
         </>
       )}
       {!showPrivateHeader && (

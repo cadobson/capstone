@@ -20,4 +20,5 @@
 .exercise-block-description {
   width: 100%;
   margin-left: 16px;
+  white-space: pre-line;
 }
