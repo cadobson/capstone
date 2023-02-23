@@ -14,7 +14,7 @@ const ExerciseBlock = ({ exercise }) => {
           {truncatedDescription}
         </div>
         <div className="exercise-block-preview-img">
-          <img src={imgUrl}/>
+          <img src={imgUrl} alt={`preview of exercise: ${name}`} />
         </div>
     </div>
   )

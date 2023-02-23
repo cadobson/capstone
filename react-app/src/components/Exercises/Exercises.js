@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux"
 import { getPrivateExercises, getPublicExercises } from "../../store/exercises"
 import ExerciseBlock from "./ExerciseBlock"
 import "./ExerciseBlock.css"
+import "./Exercises.css"
 
 const Exercises = () => {
   const exercisesData = useSelector(state => state.exercises)
@@ -15,7 +16,6 @@ const Exercises = () => {
 
   useEffect(() => {
     dispatch(getPublicExercises())
-    .then(() => {console.log("data from backend: ", exercisesData)})
     .then(() => {setIsLoaded(true)})
   }, [dispatch])
 
@@ -37,12 +37,12 @@ const Exercises = () => {
     <>
       <h1>Exercises</h1>
       <div className="load-exercises-button-container">
-        <button className="load-exercises-button" onClick={handleLoadPublicExercises}>Load Public Exercises</button>
-        {currentSessionUser && <button className="load-exercises-button" onClick={handleLoadPrivateExercises}>Load Private Exercises</button>}
+        <button className="load-exercises-button" onClick={handleLoadPublicExercises}>All Public Exercises</button>
+        {currentSessionUser && <button className="load-exercises-button" onClick={handleLoadPrivateExercises}>My Exercises</button>}
       </div>
       {showPrivateHeader && (
         <>
-          <h2>Private Exercises</h2>
+          <h2>My Exercises</h2>
           <div>Only you can see these</div>
           {isLoaded && exercisesData.length === 0 && (
             <div>
@@ -55,7 +55,7 @@ const Exercises = () => {
       )}
       {!showPrivateHeader && (
         <>
-          <h2>Public Exercises</h2>
+          <h2>All Public Exercises</h2>
         </>
       )}
       <div className="exercises-container">

@@ -44,4 +44,5 @@
 .nav-holder>a:hover, .nav-session-buttons:hover {
   color: rgb(169, 169, 169);
   cursor: pointer;
+  background-color: white;
 }

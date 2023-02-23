@@ -1,0 +1,22 @@
+.load-exercises-button-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+/* .load-exercises-button {
+  font-family: inherit;
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  border-radius: 5px;
+  text-align: center;
+  text-decoration: none;
+  background-color: #007bff;
+  border: none;
+}
+
+.load-exercises-button:hover {
+  background-color: #0069d9;
+} */
