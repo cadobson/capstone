@@ -3,27 +3,43 @@ import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import { getExercise } from "../../store/exercise"
 
+import defaultImg from "./no_preview_img.png"
+
 
 const ExerciseDetailPage = () => {
-    const id = useParams().id
-    const exerciseData = useSelector(state => state.exercise)
-    const [isLoaded, setIsLoaded] = useState(false)
+  const id = useParams().id
+  const exerciseData = useSelector(state => state.exercise)
+  const [isLoaded, setIsLoaded] = useState(false)
 
-    const dispatch = useDispatch()
+  const dispatch = useDispatch()
 
-    useEffect(() => {
-        dispatch(getExercise(id))
-        .then(() => setIsLoaded(true))
-    }, [dispatch])
+  useEffect(() => {
+    dispatch(getExercise(id))
+    .then(() => setIsLoaded(true))
+  }, [dispatch])
 
-    return (
+  return (
+    <>
+      {isLoaded && (
         <>
-            <h1>Exercise Detail Page</h1>
-            {isLoaded && (
-                <div>{exerciseData.name}</div>
-            )}
+
+          <div className="exercise-detail">
+            <div className="exercise-detail-text">
+              <h1>{exerciseData.name}</h1>
+              <div className="exercise-detail-description">{exerciseData.description}</div>
+            </div>
+            <div className="exercise-detail-preview-img">
+              <img src={exerciseData.motion_img_url || defaultImg} alt={`preview of exercise: ${exerciseData.name}`} />
+            </div>
+          </div>
         </>
-    )
+
+      )}
+      {!isLoaded && (
+        <div>Loading...</div>
+      )}
+    </>
+  )
 }
 
 export default ExerciseDetailPage
