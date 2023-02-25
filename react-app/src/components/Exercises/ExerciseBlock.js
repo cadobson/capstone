@@ -7,10 +7,8 @@ const ExerciseBlock = ({ exercise }) => {
   const [showFullDescription, setShowFullDescription] = useState(false)
 
 
-  const truncatedDescription = description.length > 400 ? description.substring(0, 397) + "...(click to show more)" : description;
+  const truncatedDescription = description.length > 200 ? description.substring(0, 197) + "...(click to show more)" : description;
   const imgUrl = motion_img_url ? motion_img_url : defaultImg
-
-  console.log(description)
 
   return (
     <div className="exercise-block">

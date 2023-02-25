@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { useDispatch } from "react-redux"
+import { useModal } from "../../context/Modal"
 import { getPrivateExercises, getPublicExercises } from "../../store/exercises"
+import CreateExerciseModal from "./CreateExerciseModal"
 import ExerciseBlock from "./ExerciseBlock"
 import "./ExerciseBlock.css"
 import "./Exercises.css"
@@ -33,12 +35,18 @@ const Exercises = () => {
     setShowPrivateHeader(false)
   }
 
+  const {setModalContent} = useModal()
+  const handleOpenCreateExerciseModal = () => {
+    setModalContent(<CreateExerciseModal />)
+  }
+
   return (
     <>
       <h1>Exercises</h1>
       <div className="load-exercises-button-container">
         <button className="load-exercises-button" onClick={handleLoadPublicExercises}>All Public Exercises</button>
         {currentSessionUser && <button className="load-exercises-button" onClick={handleLoadPrivateExercises}>My Exercises</button>}
+        <button className="create-exercise-button" onClick={handleOpenCreateExerciseModal}>Create a New Exercise</button>
       </div>
       {showPrivateHeader && (
         <>
