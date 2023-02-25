@@ -2,15 +2,14 @@ import { useState } from "react"
 import { useDispatch } from "react-redux"
 import { useHistory } from "react-router-dom"
 import { useModal } from "../../context/Modal"
-import { createExercise } from "../../store/exercise"
+import { updateExercise } from "../../store/exercise"
 
-
-function CreateExerciseModal() {
+const EditExerciseModal = ({exerciseData}) => {
   const dispatch = useDispatch()
   const history = useHistory()
 
-  const [name, setName] = useState("")
-  const [description, setDescription] = useState("")
+  const [newName, setNewName] = useState(exerciseData.name)
+  const [newDescription, setNewDescription] = useState(exerciseData.description)
 
   const [errors, setErrors] = useState([])
   const {closeModal} = useModal()
@@ -20,27 +19,27 @@ function CreateExerciseModal() {
 
     setErrors([])
     const newErrors = []
-    if (name.length < 1) newErrors.push("Name must not be empty")
-    if (description.length < 1) newErrors.push("Description must not be empty")
-    if (name.length > 255) newErrors.push("Name must be less than 255 characters")
-    if (description.length > 9999) newErrors.push("Description must be less than 10000 characters")
+    if (newName.length < 1) newErrors.push("Name must not be empty")
+    if (newDescription.length < 1) newErrors.push("Description must not be empty")
+    if (newName.length > 255) newErrors.push("Name must be less than 255 characters")
+    if (newDescription.length > 9999) newErrors.push("Description must be less than 10000 characters")
     if (newErrors.length > 0) {
       setErrors(newErrors)
       return
     }
 
-    dispatch(createExercise(name, description))
+    dispatch(updateExercise(newName, newDescription, exerciseData.id))
       .then((data) => {history.push(`/exercises/${data.id}`)})
       .then(() => closeModal())
       .catch(async (res) => {
         const data = await res.json()
         if (data && data.errors) setErrors(data.errors)
-      })
+    })
   }
 
   return (
     <>
-      <h1>Create a New Exercise</h1>
+      <h1>Edit Exercise</h1>
       <form onSubmit={handleSubmit}>
         <ul>
           {errors.map((error, idx) => (
@@ -51,23 +50,23 @@ function CreateExerciseModal() {
           Name
           <input
             type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
             required
           />
         </label>
         <label>
           Description
           <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={newDescription}
+            onChange={(e) => setNewDescription(e.target.value)}
             required
           />
         </label>
-        <button type="submit">Create</button>
+        <button type="submit">Edit</button>
       </form>
     </>
   )
 }
 
-export default CreateExerciseModal
+export default EditExerciseModal

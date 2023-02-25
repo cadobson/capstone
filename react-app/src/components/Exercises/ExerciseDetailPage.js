@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { useParams } from "react-router-dom"
-import { getExercise } from "../../store/exercise"
+import { useHistory, useParams } from "react-router-dom"
+import { useModal } from "../../context/Modal"
+import { deleteExercise, getExercise } from "../../store/exercise"
+import EditExerciseModal from "./EditExerciseModal"
 
 import defaultImg from "./no_preview_img.png"
 
@@ -11,12 +13,28 @@ const ExerciseDetailPage = () => {
   const exerciseData = useSelector(state => state.exercise)
   const [isLoaded, setIsLoaded] = useState(false)
 
+  const currentSessionUser = useSelector(state => state.session.user)
+  const showOwnerButtons = currentSessionUser && currentSessionUser.id === exerciseData.creator_id
+  console.log("showOwnerButtons", showOwnerButtons)
+
   const dispatch = useDispatch()
+  const history = useHistory()
 
   useEffect(() => {
     dispatch(getExercise(id))
     .then(() => setIsLoaded(true))
   }, [dispatch])
+
+  const handleDeleteExercise = (e) => {
+    e.preventDefault()
+    dispatch(deleteExercise(id))
+    .then(() => {history.push("/exercises")})
+  }
+
+  const {setModalContent} = useModal()
+  const handleOpenEditExerciseModal = () => {
+    setModalContent(<EditExerciseModal exerciseData={exerciseData} />)
+  }
 
   return (
     <>
@@ -30,6 +48,13 @@ const ExerciseDetailPage = () => {
             </div>
             <div className="exercise-detail-preview-img">
               <img src={exerciseData.motion_img_url || defaultImg} alt={`preview of exercise: ${exerciseData.name}`} />
+              {showOwnerButtons && (
+                <>
+                  <button className="delete-exercise-button" onClick={handleDeleteExercise}>Delete Exercise</button>
+                  <button className="edit-exercise-button" onClick={handleOpenEditExerciseModal}>Edit Exercise</button>
+                </>
+              )}
+
             </div>
           </div>
         </>
