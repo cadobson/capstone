@@ -73,6 +73,16 @@ class RoutineExercise(db.Model):
     routines = db.relationship("Routine", back_populates="exercises")
     exercises = db.relationship("Exercise", back_populates="routines")
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'routine_id': self.routine_id,
+            'exercise_id': self.exercise_id,
+            'sets_reps_array': self.sets_reps_array,
+            'instructions': self.instructions,
+            'Exercise': self.exercises.to_dict(),
+        }
+
 
 routine = db.relationship("Routine", back_populates="routine_exercises")
 exercise = db.relationship("Exercise", back_populates="routine_exercises")
