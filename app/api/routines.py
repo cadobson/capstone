@@ -46,6 +46,8 @@ def get_routine(id):
             RoutineExercise.routine_id == id).all()
         print("===============================", routine_exercises)
 
+        # TODO: Order!
+
         return_obj = routine.to_dict()
         return_obj["Routine_Exercise"] = [re.to_dict()
                                           for re in routine_exercises]

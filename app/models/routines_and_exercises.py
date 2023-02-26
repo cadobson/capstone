@@ -69,6 +69,7 @@ class RoutineExercise(db.Model):
     # sqlite3 does not support arrays, so encode as string
     sets_reps_array = db.Column(db.String(10000), nullable=False)
     instructions = db.Column(db.String(10000), nullable=True)
+    order = db.Column(db.Integer, nullable=False)
 
     routines = db.relationship("Routine", back_populates="exercises")
     exercises = db.relationship("Exercise", back_populates="routines")
@@ -80,6 +81,7 @@ class RoutineExercise(db.Model):
             'exercise_id': self.exercise_id,
             'sets_reps_array': self.sets_reps_array,
             'instructions': self.instructions,
+            'order': self.order,
             'Exercise': self.exercises.to_dict(),
         }
 
