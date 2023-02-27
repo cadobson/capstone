@@ -36,7 +36,7 @@ def upgrade():
     op.create_table('exercises',
                     sa.Column('id', sa.Integer(), nullable=False),
                     sa.Column('name', sa.String(length=255), nullable=False),
-                    sa.Column('description', sa.Text(
+                    sa.Column('description', sa.String(
                         length=10000), nullable=False),
                     sa.Column('motion_img_url', sa.String(
                         length=255), nullable=True),

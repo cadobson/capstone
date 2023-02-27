@@ -9,7 +9,7 @@ class Exercise(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
-    description = db.Column(db.Text(10000), nullable=False)
+    description = db.Column(db.String(10000), nullable=False)
     motion_img_url = db.Column(db.String(255), nullable=True)
     public = db.Column(db.Boolean, nullable=False)
     creator_id = db.Column(db.Integer, db.ForeignKey(
