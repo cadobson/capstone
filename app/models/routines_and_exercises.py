@@ -37,6 +37,8 @@ class Routine(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
+    # sqlite3 does not support arrays, so encode as string
+    order = db.Column(db.String(10000), nullable=False)
     description = db.Column(db.String(255), nullable=False)
     public = db.Column(db.Boolean, nullable=False)
     creator_id = db.Column(db.Integer, db.ForeignKey(
@@ -69,7 +71,6 @@ class RoutineExercise(db.Model):
     # sqlite3 does not support arrays, so encode as string
     sets_reps_array = db.Column(db.String(10000), nullable=False)
     instructions = db.Column(db.String(10000), nullable=True)
-    order = db.Column(db.Integer, nullable=False)
 
     routines = db.relationship("Routine", back_populates="exercises")
     exercises = db.relationship("Exercise", back_populates="routines")
