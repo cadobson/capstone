@@ -14,7 +14,7 @@ def seed_routines_exercises():
 
     # Push
     push0 = RoutineExercise(
-        routine_id=2, exercise_id=1, sets_reps_array="[5,5,5]", instructions="Warm up with half of your epxected weight.")
+        routine_id=2, exercise_id=1, sets_reps_array="[5,5,5]", instructions="Warm up with half of your expected weight.")
     push1 = RoutineExercise(
         routine_id=2, exercise_id=4, sets_reps_array="[5,5,5,5,5]", instructions=None)
     push2 = RoutineExercise(

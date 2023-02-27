@@ -53,7 +53,8 @@ class Routine(db.Model):
             'name': self.name,
             'description': self.description,
             'public': self.public,
-            'creator_id': self.creator_id
+            'creator_id': self.creator_id,
+            'order': self.order,
         }
 
 
@@ -82,22 +83,21 @@ class RoutineExercise(db.Model):
             'exercise_id': self.exercise_id,
             'sets_reps_array': self.sets_reps_array,
             'instructions': self.instructions,
-            'order': self.order,
             'Exercise': self.exercises.to_dict(),
         }
 
 
-routine = db.relationship("Routine", back_populates="routine_exercises")
-exercise = db.relationship("Exercise", back_populates="routine_exercises")
+# routine = db.relationship("Routine", back_populates="routine_exercises")
+# exercise = db.relationship("Exercise", back_populates="routine_exercises")
 
 
-def to_dict(self):
-    return {
-        'id': self.id,
-        'routine_id': self.routine_id,
-        'exercise_id': self.exercise_id,
-        'order': self.order,
-        'sets': self.sets,
-        'reps': self.reps,
-        'weight': self.weight
-    }
+# def to_dict(self):
+#     return {
+#         'id': self.id,
+#         'routine_id': self.routine_id,
+#         'exercise_id': self.exercise_id,
+#         'order': self.order,
+#         'sets': self.sets,
+#         'reps': self.reps,
+#         'weight': self.weight
+#     }
