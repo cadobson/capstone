@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, session, request
 from app.api.auth_routes import validation_errors_to_error_messages
-from app.forms.exercise_form import CreateExerciseForm, EditExerciseForm
+from app.forms.routine_form import CreateRoutineForm, EditRoutineForm
 from app.models import db, Routine, RoutineExercise, Exercise, User
 from sqlalchemy.orm import joinedload
 from flask_login import current_user
@@ -44,12 +44,77 @@ def get_routine(id):
     if routine.public == True or routine.creator_id == current_user.id:
         routine_exercises = RoutineExercise.query.options(joinedload(RoutineExercise.exercises)).filter(
             RoutineExercise.routine_id == id).all()
-        print("===============================", routine_exercises)
-
-        # TODO: Order!
 
         return_obj = routine.to_dict()
         return_obj["Routine_Exercise"] = [re.to_dict()
                                           for re in routine_exercises]
         return return_obj
+    return {'errors': ['Unauthorized']}, 401
+
+# Create a new routine
+
+
+@routine_routes.route('/', methods=['POST'])
+def create_routine():
+    if not current_user.is_authenticated:
+        return {'errors': ['Unauthorized']}, 401
+
+    form = CreateRoutineForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+    if form.validate_on_submit():
+        data = request.get_json()
+        routine = Routine(
+            name=data['name'],
+            description=data['description'],
+            public=False,
+            creator_id=current_user.id,
+            order="[]"
+        )
+        db.session.add(routine)
+        db.session.commit()
+        return routine.to_dict()
+    return {'errors': validation_errors_to_error_messages(form.errors)}, 401
+
+# Edit a routine
+
+
+@routine_routes.route('/<int:id>', methods=['PUT'])
+def edit_routine(id):
+    if not current_user.is_authenticated:
+        return {'errors': ['Unauthorized']}, 401
+
+    form = EditRoutineForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+    if form.validate_on_submit():
+        data = request.get_json()
+        routine = Routine.query.filter(Routine.id == id).first()
+        if routine.creator_id == current_user.id:
+            routine.name = data['name']
+            routine.description = data['description']
+            routine.order = data['order']
+            db.session.commit()
+            return routine.to_dict()
+        return {'errors': ['Unauthorized']}, 401
+    return {'errors': validation_errors_to_error_messages(form.errors)}, 401
+
+# Delete a routine and all of its routine_exercises
+
+
+@routine_routes.route('/<int:id>', methods=['DELETE'])
+def delete_routine(id):
+    if not current_user.is_authenticated:
+        return {'errors': ['Unauthorized']}, 401
+
+    routine = Routine.query.filter(Routine.id == id).first()
+    if routine.creator_id == current_user.id:
+        routine_exercises = RoutineExercise.query.filter(
+            RoutineExercise.routine_id == id).all()
+        for routine_exercise in routine_exercises:
+            db.session.delete(routine_exercise)
+        db.session.delete(routine)
+        db.session.commit()
+        return {
+            "message": "Routine deleted",
+            "statusCode": 200
+        }, 200
     return {'errors': ['Unauthorized']}, 401
