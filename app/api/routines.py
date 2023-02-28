@@ -222,3 +222,49 @@ def delete_routine_exercise(id, routine_exercise_id):
             "statusCode": 200
         }, 200
     return {'errors': ['Unauthorized']}, 401
+
+# Copy a routine and all of its routine_exercises
+
+
+@routine_routes.route('/<int:id>/copy', methods=['POST'])
+def copy_routine(id):
+    if not current_user.is_authenticated:
+        return {'errors': ['Unauthorized']}, 401
+
+    routine = Routine.query.filter(Routine.id == id).first()
+    if not routine:
+        return {
+            'errors': ['Routine not found'],
+            "statusCode": 404,
+            'message': "Routine not found"
+        }, 404
+
+    # Check if the routine is public or belongs to the current user
+    if routine.public == False and routine.creator_id != current_user.id:
+        return {'errors': ['Unauthorized']}, 401
+
+    # Create a new routine
+    new_routine = Routine(
+        name=routine.name,
+        description=routine.description,
+        public=False,
+        creator_id=current_user.id,
+        order=routine.order
+    )
+    db.session.add(new_routine)
+    db.session.commit()
+
+    # Create all of the routine_exercises
+    routine_exercises = RoutineExercise.query.filter(
+        RoutineExercise.routine_id == id).all()
+    for routine_exercise in routine_exercises:
+        new_routine_exercise = RoutineExercise(
+            routine_id=new_routine.id,
+            exercise_id=routine_exercise.exercise_id,
+            sets_reps_array=routine_exercise.sets_reps_array,
+            instructions=routine_exercise.instructions,
+            creator_id=current_user.id
+        )
+        db.session.add(new_routine_exercise)
+    db.session.commit()
+    return new_routine.to_dict()
