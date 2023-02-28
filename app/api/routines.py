@@ -268,3 +268,5 @@ def copy_routine(id):
         db.session.add(new_routine_exercise)
     db.session.commit()
     return new_routine.to_dict()
+
+# Get all of the routines that belong to the current user
