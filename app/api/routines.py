@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, session, request
 from app.api.auth_routes import validation_errors_to_error_messages
-from app.forms.routine_form import CreateRoutineForm, EditRoutineForm
+from app.forms.routine_form import CreateRoutineForm, EditRoutineForm, CreateRoutineExerciseForm, EditRoutineExerciseForm
 from app.models import db, Routine, RoutineExercise, Exercise, User
 from sqlalchemy.orm import joinedload
 from flask_login import current_user
@@ -87,7 +87,16 @@ def edit_routine(id):
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
         data = request.get_json()
+
         routine = Routine.query.filter(Routine.id == id).first()
+
+        if not routine:
+            return {
+                'errors': ['Routine not found'],
+                "statusCode": 404,
+                'message': "Routine not found"
+            }, 404
+
         if routine.creator_id == current_user.id:
             routine.name = data['name']
             routine.description = data['description']
@@ -115,6 +124,101 @@ def delete_routine(id):
         db.session.commit()
         return {
             "message": "Routine deleted",
+            "statusCode": 200
+        }, 200
+    return {'errors': ['Unauthorized']}, 401
+
+# Add a routine_exercise to a routine
+
+
+@routine_routes.route('/<int:id>', methods=['POST'])
+def create_routine_exercise(id):
+    if not current_user.is_authenticated:
+        return {'errors': ['Unauthorized']}, 401
+
+    form = CreateRoutineExerciseForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+    if form.validate_on_submit():
+        data = request.get_json()
+
+        # Check if the exercise exists and is either public or belongs to the current user
+        proposed_exercise = Exercise.query.filter(
+            Exercise.id == data['exercise_id']).first()
+        if not proposed_exercise:
+            return {
+                'errors': ['Exercise not found'],
+                "statusCode": 404,
+                'message': "Exercise not found"
+            }, 404
+        if proposed_exercise.public == False and proposed_exercise.creator_id != current_user.id:
+            return {'errors': ['Unauthorized']}, 401
+
+        routine_exercise = RoutineExercise(
+            routine_id=id,
+            exercise_id=data['exercise_id'],
+            sets_reps_array=data['sets_reps_array'],
+            instructions=data['instructions'],
+            creator_id=current_user.id
+        )
+        db.session.add(routine_exercise)
+        db.session.commit()
+        return routine_exercise.to_dict()
+    return {'errors': validation_errors_to_error_messages(form.errors)}, 401
+
+# Edit the instructions or sets_reps_array of a routine_exercise
+
+
+@routine_routes.route('/<int:id>/routine_exercise/<int:routine_exercise_id>', methods=['PUT'])
+def edit_routine_exercise(id, routine_exercise_id):
+    if not current_user.is_authenticated:
+        return {'errors': ['Unauthorized']}, 401
+
+    form = EditRoutineExerciseForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+    if form.validate_on_submit():
+        data = request.get_json()
+        routine_exercise = RoutineExercise.query.filter(
+            RoutineExercise.routine_id == id, RoutineExercise.id == routine_exercise_id).first()
+
+        if not routine_exercise:
+            return {
+                'errors': ['Routine Exercise not found'],
+                "statusCode": 404,
+                'message': "Routine Exercise not found"
+            }, 404
+
+        if routine_exercise.creator_id == current_user.id:
+            routine_exercise.instructions = data['instructions']
+            routine_exercise.sets_reps_array = data['sets_reps_array']
+            db.session.commit()
+            return routine_exercise.to_dict()
+        return {'errors': ['Unauthorized']}, 401
+    return {'errors': validation_errors_to_error_messages(form.errors)}, 401
+
+# Delete a routine_exercise
+
+
+@routine_routes.route('/<int:id>/routine_exercise/<int:routine_exercise_id>', methods=['DELETE'])
+def delete_routine_exercise(id, routine_exercise_id):
+    if not current_user.is_authenticated:
+        return {'errors': ['Unauthorized']}, 401
+
+    routine_exercise = RoutineExercise.query.filter(
+        RoutineExercise.routine_id == id, RoutineExercise.id == routine_exercise_id).first()
+
+    # Check to see if the routine_exercise exists
+    if not routine_exercise:
+        return {
+            'errors': ['Routine Exercise not found'],
+            "statusCode": 404,
+            'message': "Routine Exercise not found"
+        }, 404
+
+    if routine_exercise.creator_id == current_user.id:
+        db.session.delete(routine_exercise)
+        db.session.commit()
+        return {
+            "message": "Routine Exercise deleted",
             "statusCode": 200
         }, 200
     return {'errors': ['Unauthorized']}, 401
