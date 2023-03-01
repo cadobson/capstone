@@ -33,3 +33,10 @@ class EditRoutineExerciseForm(FlaskForm):
     sets_reps_array = StringField(
         'sets_reps_array', validators=[DataRequired()])
     instructions = StringField('instructions')
+
+
+class SwapRoutineExercisesForm(FlaskForm):
+    routine_exercise_1_id = IntegerField(
+        'routine_exercise_1_id', validators=[DataRequired()])
+    routine_exercise_2_id = IntegerField(
+        'routine_exercise_2_id', validators=[DataRequired()])

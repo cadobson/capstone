@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, session, request
 from app.api.auth_routes import validation_errors_to_error_messages
-from app.forms.routine_form import CreateRoutineForm, EditRoutineForm, CreateRoutineExerciseForm, EditRoutineExerciseForm
+from app.forms.routine_form import CreateRoutineForm, EditRoutineForm, CreateRoutineExerciseForm, EditRoutineExerciseForm, SwapRoutineExercisesForm
 from app.models import db, Routine, RoutineExercise, Exercise, User
 from sqlalchemy.orm import joinedload
 from flask_login import current_user
@@ -48,6 +48,11 @@ def get_routine(id):
         return_obj = routine.to_dict()
         return_obj["Routine_Exercise"] = [re.to_dict()
                                           for re in routine_exercises]
+
+        # Sort the exercises in the routine by their order
+        return_obj["Routine_Exercise"].sort(
+            key=lambda x: x["order"], reverse=False)
+
         return return_obj
     return {'errors': ['Unauthorized']}, 401
 
@@ -297,4 +302,63 @@ def copy_routine(id):
     db.session.commit()
     return new_routine.to_dict()
 
+# Swap the order of two routine_exercises
+
+
+@routine_routes.route('/<int:id>/swap', methods=['PUT'])
+def swap_routine_exercises(id):
+    if not current_user.is_authenticated:
+        return {'errors': ['Unauthorized']}, 401
+
+    form = SwapRoutineExercisesForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+    if form.validate_on_submit():
+        data = request.get_json()
+        routine_exercise_1 = RoutineExercise.query.filter(
+            RoutineExercise.routine_id == id, RoutineExercise.id == data['routine_exercise_1_id']).first()
+        routine_exercise_2 = RoutineExercise.query.filter(
+            RoutineExercise.routine_id == id, RoutineExercise.id == data['routine_exercise_2_id']).first()
+
+        # Check to see if the routine_exercises exist
+        if not routine_exercise_1 or not routine_exercise_2:
+            return {
+                'errors': ['Routine Exercise not found'],
+                "statusCode": 404,
+                'message': "Routine Exercise not found"
+            }, 404
+
+        # Check to see if the routine_exercises belong to the current user
+        if routine_exercise_1.creator_id != current_user.id or routine_exercise_2.creator_id != current_user.id:
+            return {'errors': ['Unauthorized']}, 401
+
+        # Swap the order of the routine_exercises
+        temp = routine_exercise_1.order
+        routine_exercise_1.order = routine_exercise_2.order
+        routine_exercise_2.order = temp
+        db.session.commit()
+        return {
+            "message": "Routine Exercises swapped",
+            "statusCode": 200
+        }, 200
+    return {'errors': validation_errors_to_error_messages(form.errors)}, 401
+
+
 # Get all of the routines that belong to the current user
+
+
+@routine_routes.route('/current', methods=['GET'])
+def get_user_routines():
+    if not current_user.is_authenticated:
+        return {'errors': ['Unauthorized']}, 401
+
+    routines = Routine.query.filter(
+        Routine.creator_id == current_user.id).all()
+    return {"routines": [routine.to_dict() for routine in routines]}
+
+# Get all of the routines that are public
+
+
+@routine_routes.route('/public', methods=['GET'])
+def get_public_routines():
+    routines = Routine.query.filter(Routine.public == True).all()
+    return {"routines": [routine.to_dict() for routine in routines]}
