@@ -37,8 +37,6 @@ class Routine(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
-    # sqlite3 does not support arrays, so encode as string
-    order = db.Column(db.String(10000), nullable=False)
     description = db.Column(db.String(10000), nullable=False)
     public = db.Column(db.Boolean, nullable=False)
     creator_id = db.Column(db.Integer, db.ForeignKey(
@@ -54,7 +52,6 @@ class Routine(db.Model):
             'description': self.description,
             'public': self.public,
             'creator_id': self.creator_id,
-            'order': self.order,
         }
 
 
@@ -74,6 +71,7 @@ class RoutineExercise(db.Model):
     instructions = db.Column(db.String(10000), nullable=True)
     creator_id = db.Column(db.Integer, db.ForeignKey(
         add_prefix_for_prod("users.id")), nullable=False)
+    order = db.Column(db.Integer, nullable=False)
 
     routines = db.relationship("Routine", back_populates="exercises")
     exercises = db.relationship("Exercise", back_populates="routines")
@@ -86,7 +84,8 @@ class RoutineExercise(db.Model):
             'sets_reps_array': self.sets_reps_array,
             'instructions': self.instructions,
             'Exercise': self.exercises.to_dict(),
-            'creator_id': self.creator_id
+            'creator_id': self.creator_id,
+            'order': self.order,
         }
 
 

@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: dcc192e30d0d
+Revision ID: 104de3e22997
 Revises: 
-Create Date: 2023-02-27 19:06:05.608838
+Create Date: 2023-02-28 22:42:17.415194
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'dcc192e30d0d'
+revision = '104de3e22997'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -40,7 +40,6 @@ def upgrade():
     op.create_table('routines',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=255), nullable=False),
-    sa.Column('order', sa.String(length=10000), nullable=False),
     sa.Column('description', sa.String(length=10000), nullable=False),
     sa.Column('public', sa.Boolean(), nullable=False),
     sa.Column('creator_id', sa.Integer(), nullable=False),
@@ -54,6 +53,7 @@ def upgrade():
     sa.Column('sets_reps_array', sa.String(length=10000), nullable=False),
     sa.Column('instructions', sa.String(length=10000), nullable=True),
     sa.Column('creator_id', sa.Integer(), nullable=False),
+    sa.Column('order', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['creator_id'], ['users.id'], ),
     sa.ForeignKeyConstraint(['exercise_id'], ['exercises.id'], ),
     sa.ForeignKeyConstraint(['routine_id'], ['routines.id'], ),

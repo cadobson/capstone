@@ -67,8 +67,7 @@ def create_routine():
             name=data['name'],
             description=data['description'],
             public=False,
-            creator_id=current_user.id,
-            order="[]"
+            creator_id=current_user.id
         )
         db.session.add(routine)
         db.session.commit()
@@ -100,7 +99,6 @@ def edit_routine(id):
         if routine.creator_id == current_user.id:
             routine.name = data['name']
             routine.description = data['description']
-            routine.order = data['order']
             db.session.commit()
             return routine.to_dict()
         return {'errors': ['Unauthorized']}, 401
@@ -141,6 +139,18 @@ def create_routine_exercise(id):
     if form.validate_on_submit():
         data = request.get_json()
 
+        # Check if the routine exists and belongs to the current user
+        routine = Routine.query.filter(Routine.id == id).first()
+        if not routine:
+            return {
+                'errors': ['Routine not found'],
+                "statusCode": 404,
+                'message': "Routine not found"
+            }, 404
+
+        if routine.creator_id != current_user.id:
+            return {'errors': ['Unauthorized']}, 401
+
         # Check if the exercise exists and is either public or belongs to the current user
         proposed_exercise = Exercise.query.filter(
             Exercise.id == data['exercise_id']).first()
@@ -153,12 +163,22 @@ def create_routine_exercise(id):
         if proposed_exercise.public == False and proposed_exercise.creator_id != current_user.id:
             return {'errors': ['Unauthorized']}, 401
 
+        number_of_routine_exercises = RoutineExercise.query.filter(
+            RoutineExercise.routine_id == id).count()
+        if number_of_routine_exercises >= 20:
+            return {
+                'errors': ['Routine is full'],
+                "statusCode": 400,
+                'message': "Routine is full"
+            }, 400
+
         routine_exercise = RoutineExercise(
             routine_id=id,
             exercise_id=data['exercise_id'],
             sets_reps_array=data['sets_reps_array'],
             instructions=data['instructions'],
-            creator_id=current_user.id
+            creator_id=current_user.id,
+            order=number_of_routine_exercises + 1
         )
         db.session.add(routine_exercise)
         db.session.commit()
@@ -217,6 +237,14 @@ def delete_routine_exercise(id, routine_exercise_id):
     if routine_exercise.creator_id == current_user.id:
         db.session.delete(routine_exercise)
         db.session.commit()
+
+        # Update the order of the remaining routine_exercises
+        routine_exercises = RoutineExercise.query.filter(
+            RoutineExercise.routine_id == id).all()
+        for i in range(len(routine_exercises)):
+            routine_exercises[i].order = i + 1
+        db.session.commit()
+
         return {
             "message": "Routine Exercise deleted",
             "statusCode": 200
@@ -248,8 +276,7 @@ def copy_routine(id):
         name=routine.name,
         description=routine.description,
         public=False,
-        creator_id=current_user.id,
-        order=routine.order
+        creator_id=current_user.id
     )
     db.session.add(new_routine)
     db.session.commit()
@@ -263,7 +290,8 @@ def copy_routine(id):
             exercise_id=routine_exercise.exercise_id,
             sets_reps_array=routine_exercise.sets_reps_array,
             instructions=routine_exercise.instructions,
-            creator_id=current_user.id
+            creator_id=current_user.id,
+            order=routine_exercise.order
         )
         db.session.add(new_routine_exercise)
     db.session.commit()

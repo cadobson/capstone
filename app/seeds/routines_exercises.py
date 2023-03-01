@@ -4,21 +4,21 @@ from app.models import db, RoutineExercise, environment, SCHEMA
 def seed_routines_exercises():
     # Starting Strength
     ss0 = RoutineExercise(
-        routine_id=1, exercise_id=3, sets_reps_array="[5,5,5]", instructions="Warm up with half of your expected weight.", creator_id=1)
+        routine_id=1, exercise_id=3, sets_reps_array="[5,5,5]", instructions="Warm up with half of your expected weight.", creator_id=1, order=1)
     ss1 = RoutineExercise(
-        routine_id=1, exercise_id=1, sets_reps_array="[5,5,5]", instructions=None, creator_id=1)
+        routine_id=1, exercise_id=1, sets_reps_array="[5,5,5]", instructions=None, creator_id=1, order=2)
     ss2 = RoutineExercise(
-        routine_id=1, exercise_id=2, sets_reps_array="[5]", instructions=None, creator_id=1)
+        routine_id=1, exercise_id=2, sets_reps_array="[5]", instructions=None, creator_id=1, order=3)
     ss3 = RoutineExercise(
-        routine_id=1, exercise_id=3, sets_reps_array="[5,5,5]", instructions=None, creator_id=1)
+        routine_id=1, exercise_id=3, sets_reps_array="[5,5,5]", instructions=None, creator_id=1, order=4)
 
     # Push
     push0 = RoutineExercise(
-        routine_id=2, exercise_id=1, sets_reps_array="[5,5,5]", instructions="Warm up with half of your expected weight.", creator_id=1)
+        routine_id=2, exercise_id=1, sets_reps_array="[5,5,5]", instructions="Warm up with half of your expected weight.", creator_id=1, order=1)
     push1 = RoutineExercise(
-        routine_id=2, exercise_id=4, sets_reps_array="[5,5,5,5,5]", instructions=None, creator_id=1)
+        routine_id=2, exercise_id=4, sets_reps_array="[5,5,5,5,5]", instructions=None, creator_id=1, order=2)
     push2 = RoutineExercise(
-        routine_id=2, exercise_id=1, sets_reps_array="[5,5,5,5,5]", instructions=None, creator_id=1)
+        routine_id=2, exercise_id=1, sets_reps_array="[5,5,5,5,5]", instructions=None, creator_id=1, order=3)
 
     db.session.add(ss0)
     db.session.add(ss1)
