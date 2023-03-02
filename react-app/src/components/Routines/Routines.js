@@ -4,6 +4,8 @@ import { useDispatch } from 'react-redux';
 import { getPrivateRoutines, getPublicRoutines } from '../../store/routines';
 import { useModal } from '../../context/Modal';
 import RoutineBlock from './RoutineBlock';
+import "./Routine.css"
+import "./RoutineBlock.css"
 
 const Routines = () => {
   const routinesData = useSelector((state) => state.routines);
