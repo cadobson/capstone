@@ -20,9 +20,24 @@ const RoutineDetailPage = () => {
   }, [dispatch])
 
   return (
-    <div>
-      <h1>Routine Detail Page</h1>
-    </div>
+    <>
+      {isLoaded && (
+        <>
+          <div className="routine-detail">
+            <div className="routine-detail-text">
+              <h1>{routineData.name}</h1>
+              <div className="routine-detail-description">{routineData.description}</div>
+            </div>
+            <div className="routine-detail-sidebar">
+
+            </div>
+          </div>
+        </>
+      )}
+      {!isLoaded && (
+        <div>Loading...</div>
+      )}
+    </>
   )
 }
 

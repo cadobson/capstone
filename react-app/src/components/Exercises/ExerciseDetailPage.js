@@ -45,7 +45,7 @@ const ExerciseDetailPage = () => {
               <h1>{exerciseData.name}</h1>
               <div className="exercise-detail-description">{exerciseData.description}</div>
             </div>
-            <div className="exercise-detail-preview-img">
+            <div className="exercise-detail-sidebar">
               <img src={exerciseData.motion_img_url || defaultImg} alt={`preview of exercise: ${exerciseData.name}`} />
               {showOwnerButtons && (
                 <>
