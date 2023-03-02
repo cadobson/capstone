@@ -37,6 +37,7 @@ const Exercises = () => {
 
   const {setModalContent} = useModal()
   const handleOpenCreateExerciseModal = () => {
+    // The redirect to the new exercise is inside this modal
     setModalContent(<CreateExerciseModal />)
   }
 
@@ -56,9 +57,7 @@ const Exercises = () => {
             <div>
               You don't have any exercises yet. Consider creating some!
             </div>
-          )
-
-          }
+          )}
         </>
       )}
       {!showPrivateHeader && (

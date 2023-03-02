@@ -341,24 +341,3 @@ def swap_routine_exercises(id):
             "statusCode": 200
         }, 200
     return {'errors': validation_errors_to_error_messages(form.errors)}, 401
-
-
-# Get all of the routines that belong to the current user
-
-
-@routine_routes.route('/current', methods=['GET'])
-def get_user_routines():
-    if not current_user.is_authenticated:
-        return {'errors': ['Unauthorized']}, 401
-
-    routines = Routine.query.filter(
-        Routine.creator_id == current_user.id).all()
-    return {"routines": [routine.to_dict() for routine in routines]}
-
-# Get all of the routines that are public
-
-
-@routine_routes.route('/public', methods=['GET'])
-def get_public_routines():
-    routines = Routine.query.filter(Routine.public == True).all()
-    return {"routines": [routine.to_dict() for routine in routines]}
