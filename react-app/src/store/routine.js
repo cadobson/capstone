@@ -20,6 +20,31 @@ export const getRoutine = (id) => async (dispatch) => {
   return response;
 }
 
+export const createRoutine = (name, description) => async (dispatch) => {
+  const response = await fetch("/api/routines/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name,
+      description,
+    }),
+  });
+  if (response.ok) {
+    const data = await response.json();
+    dispatch(setRoutine(data));
+    return data;
+  } else if (response.status < 500) {
+    const data = await response.json();
+    if (data.errors) {
+      return data.errors;
+    }
+  } else {
+    return ["An error occured. Please try again."];
+  }
+};
+
 
 
 const routineReducer = (state = {}, action) => {

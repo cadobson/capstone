@@ -50,6 +50,7 @@ function CreateExerciseModal() {
         <label>
           Name
           <input
+            placeholder="Exercise name"
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -59,12 +60,13 @@ function CreateExerciseModal() {
         <label>
           Description
           <textarea
+            placeholder="Exercise description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
           />
         </label>
-        <button type="submit">Create</button>
+        <button type="submit">Create new Exercise</button>
       </form>
     </>
   )
