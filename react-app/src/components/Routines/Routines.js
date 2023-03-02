@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { getPrivateRoutines, getPublicRoutines } from '../../store/routines';
 import { useModal } from '../../context/Modal';
+import RoutineBlock from './RoutineBlock';
 
 const Routines = () => {
   const routinesData = useSelector((state) => state.routines);
@@ -65,7 +66,7 @@ const Routines = () => {
       {isLoaded && routinesData.length > 0 && (
         <div className="routines-container">
           {routinesData.map((routine) => (
-            <>Routine Block</>
+            <RoutineBlock routine={routine} key={routine.id} />
           ))}
         </div>
       )}
