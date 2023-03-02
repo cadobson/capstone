@@ -2,6 +2,7 @@ import { useParams, useHistory } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import { useState, useEffect } from "react"
 import { getRoutine } from "../../store/routine"
+import RoutineExerciseBlock from "./RoutineExerciseBlock"
 
 const RoutineDetailPage = () => {
   const id = useParams().id
@@ -27,6 +28,10 @@ const RoutineDetailPage = () => {
             <div className="routine-detail-text">
               <h1>{routineData.name}</h1>
               <div className="routine-detail-description">{routineData.description}</div>
+              This routine has {routineData.Routine_Exercise.length} exercises.
+              {routineData.Routine_Exercise.map((routineExercise) => (
+                <RoutineExerciseBlock routineExercise={routineExercise} key={routineExercise.id} />
+              ))}
             </div>
             <div className="routine-detail-sidebar">
               This routine was contributed by {routineData.creator.username}.
