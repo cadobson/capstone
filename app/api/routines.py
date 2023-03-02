@@ -32,7 +32,7 @@ def get_routines_public():
 
 @routine_routes.route('/<int:id>', methods=['GET'])
 def get_routine(id):
-    routine = Routine.query.filter(Routine.id == id).first()
+    routine = Routine.query.options(joinedload(Routine.creator)).filter(Routine.id == id).first()
 
     if not routine:
         return {

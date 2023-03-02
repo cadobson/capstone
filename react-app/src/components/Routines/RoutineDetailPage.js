@@ -29,7 +29,13 @@ const RoutineDetailPage = () => {
               <div className="routine-detail-description">{routineData.description}</div>
             </div>
             <div className="routine-detail-sidebar">
-
+              This routine was contributed by {routineData.creator.username}.
+              {showOwnerButtons && (
+                <>
+                  <button className="delete-routine-button">Delete Routine</button>
+                  <button className="edit-routine-button">Edit Routine</button>
+                </>
+              )} 
             </div>
           </div>
         </>

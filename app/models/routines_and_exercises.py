@@ -52,6 +52,7 @@ class Routine(db.Model):
             'description': self.description,
             'public': self.public,
             'creator_id': self.creator_id,
+            'creator': self.creator.to_dict(),
         }
 
 

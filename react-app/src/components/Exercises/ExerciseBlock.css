@@ -22,3 +22,7 @@
   margin-left: 16px;
   white-space: pre-line;
 }
+
+.delete-exercise-button, .edit-exercise-button {
+  width: 200px;
+}
