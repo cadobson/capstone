@@ -15,7 +15,6 @@ const ExerciseDetailPage = () => {
 
   const currentSessionUser = useSelector(state => state.session.user)
   const showOwnerButtons = currentSessionUser && currentSessionUser.id === exerciseData.creator_id
-  console.log("showOwnerButtons", showOwnerButtons)
 
   const dispatch = useDispatch()
   const history = useHistory()

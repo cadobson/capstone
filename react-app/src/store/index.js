@@ -4,12 +4,14 @@ import session from './session'
 import exercisesReducer from './exercises'
 import exerciseReducer from './exercise';
 import routinesReducer from './routines';
+import routineReducer from './routine';
 
 const rootReducer = combineReducers({
   session,
   exercises: exercisesReducer,
   exercise: exerciseReducer,
   routines: routinesReducer,
+  routine: routineReducer,
 });
 
 

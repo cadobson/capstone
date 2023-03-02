@@ -8,6 +8,7 @@ import Navigation from "./components/Navigation";
 import Exercises from "./components/Exercises/Exercises";
 import ExerciseDetailPage from "./components/Exercises/ExerciseDetailPage";
 import Routines from "./components/Routines";
+import RoutineDetailPage from "./components/Routines/RoutineDetailPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -34,6 +35,9 @@ function App() {
               </Route>
               <Route path="/exercises">
                 <Exercises />
+              </Route>
+              <Route path="/routines/:id">
+                <RoutineDetailPage />
               </Route>
               <Route path="/routines">
                 <Routines />

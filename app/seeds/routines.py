@@ -5,7 +5,7 @@ def seed_routines():
     startingstrength = Routine(
         name='Starting Strength', description='The most popular introductory strength training program in the world.', public=True, creator_id=1)
     push = Routine(
-        name='Push', description='A routine for working your chest, shoulders, and triceps.', public=True, creator_id=1)
+        name='Push', description='A routine for working your chest, shoulders, and triceps. "Push" refers to the pushing motions of the exercises. This routine is often paired with a Pull routine and a leg routine, performed on alternating days.', public=True, creator_id=1)
 
     db.session.add(startingstrength)
     db.session.add(push)
