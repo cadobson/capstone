@@ -6,6 +6,7 @@ import { useModal } from '../../context/Modal';
 import RoutineBlock from './RoutineBlock';
 import "./Routine.css"
 import "./RoutineBlock.css"
+import CreateRoutineModal from './CreateRoutineModal';
 
 const Routines = () => {
   const routinesData = useSelector((state) => state.routines);
@@ -36,9 +37,7 @@ const Routines = () => {
 
   const {setModalContent} = useModal()
   const handleOpenCreateRoutineModal = () => {
-    // The redirect to the new routine is inside this modal
-    // setModalContent(<CreateRoutineModal />)
-    // Does not exist yet
+    setModalContent(<CreateRoutineModal />)
   }
 
   return (

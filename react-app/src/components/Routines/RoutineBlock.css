@@ -13,8 +13,8 @@
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
 }
 
-.routine-block-text, .routine-block-sidebar {
-  /* border: solid red 1px; */
+.routine-detail-text, .routine-detail-sidebar {
+  width: 200px;
 }
 
 .routine-block-text, .routine-detail-text {

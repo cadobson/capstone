@@ -16,6 +16,13 @@ export const getRoutine = (id) => async (dispatch) => {
   if (response.ok) {
     const data = await response.json();
     dispatch(setRoutine(data));
+  } else if (response.status < 500) {
+    const data = await response.json();
+    if (data.errors) {
+      throw new Error(data.errors)
+    }
+  } else {
+    throw new Error(["An error occured. Please try again."]);
   }
   return response;
 }
@@ -38,14 +45,30 @@ export const createRoutine = (name, description) => async (dispatch) => {
   } else if (response.status < 500) {
     const data = await response.json();
     if (data.errors) {
-      return data.errors;
+      throw new Error(data.errors)
     }
   } else {
-    return ["An error occured. Please try again."];
+    throw new Error(["An error occured. Please try again."]);
   }
 };
 
-
+export const deleteRoutine = (id) => async (dispatch) => {
+  const response = await fetch(`/api/routines/${id}`, {
+    method: "DELETE",
+  });
+  if (response.ok) {
+    const data = await response.json();
+    dispatch(removeRoutine(data));
+    return data;
+  } else if (response.status < 500) {
+    const data = await response.json();
+    if (data.errors) {
+      throw new Error(data.errors)
+    }
+  } else {
+    throw new Error(["An error occured. Please try again."]);
+  }
+};
 
 const routineReducer = (state = {}, action) => {
   switch (action.type) {
@@ -55,7 +78,7 @@ const routineReducer = (state = {}, action) => {
     }
     case REMOVE_ROUTINE:{
       const newState = { ...action.payload };
-      return newState;
+      return {};
     }
     default: {
       return state;

@@ -1,13 +1,14 @@
 import { useParams, useHistory } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import { useState, useEffect } from "react"
-import { getRoutine } from "../../store/routine"
+import { deleteRoutine, getRoutine } from "../../store/routine"
 import RoutineExerciseBlock from "./RoutineExerciseBlock"
 
 const RoutineDetailPage = () => {
   const id = useParams().id
   const routineData = useSelector(state => state.routine)
   const [isLoaded, setIsLoaded] = useState(false)
+  const [display404, setDisplay404] = useState(false)
 
   const currentSessionUser = useSelector(state => state.session.user)
   const showOwnerButtons = currentSessionUser && currentSessionUser.id === routineData.creator_id
@@ -18,7 +19,15 @@ const RoutineDetailPage = () => {
   useEffect(() => {
     dispatch(getRoutine(id))
     .then(() => setIsLoaded(true))
-  }, [dispatch])
+    .catch((error) => {setDisplay404(true)})
+  }, [dispatch, id])
+
+  const handleDeleteRoutine = (e) => {
+    e.preventDefault()
+    setIsLoaded(false)
+    dispatch(deleteRoutine(id))
+    .then(() => {history.push("/routines")})
+  }
 
   return (
     <>
@@ -37,16 +46,19 @@ const RoutineDetailPage = () => {
               This routine was contributed by {routineData.creator.username}.
               {showOwnerButtons && (
                 <>
-                  <button className="delete-routine-button">Delete Routine</button>
+                  <button className="delete-routine-button" onClick={handleDeleteRoutine}>Delete Routine</button>
                   <button className="edit-routine-button">Edit Routine</button>
                 </>
-              )} 
+              )}
             </div>
           </div>
         </>
       )}
-      {!isLoaded && (
+      {!isLoaded && !display404 && (
         <div>Loading...</div>
+      )}
+      {display404 && (
+        <div>404: Routine not found.</div>
       )}
     </>
   )
