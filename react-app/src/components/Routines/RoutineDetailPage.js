@@ -5,6 +5,7 @@ import { deleteRoutine, getRoutine } from "../../store/routine"
 import RoutineExerciseBlock from "./RoutineExerciseBlock"
 import { useModal } from "../../context/Modal"
 import EditRoutineModal from "./EditRoutineModal"
+import CreateRoutineExerciseModal from "./CreateRoutineExerciseModal"
 
 const RoutineDetailPage = () => {
   const id = useParams().id
@@ -36,6 +37,10 @@ const RoutineDetailPage = () => {
     setModalContent(<EditRoutineModal routineData={routineData} />)
   }
 
+  const handleOpenCreateRoutineExerciseModal = () => {
+    setModalContent(<CreateRoutineExerciseModal routineData={routineData} />)
+  }
+
   return (
     <>
       {isLoaded && (
@@ -55,6 +60,7 @@ const RoutineDetailPage = () => {
                 <>
                   <button className="delete-routine-button" onClick={handleDeleteRoutine}>Delete Routine</button>
                   <button className="edit-routine-button" onClick={handleOpenEditRoutineModal}>Edit Routine</button>
+                  <button className="create-routine-exercise-button" onClick={handleOpenCreateRoutineExerciseModal}>Add a Step</button>
                 </>
               )}
             </div>
