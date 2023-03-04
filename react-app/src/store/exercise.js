@@ -38,10 +38,10 @@ export const createExercise = (name, description) => async (dispatch) => {
   } else if (response.status < 500) {
     const data = await response.json();
     if (data.errors) {
-      return data.errors;
+      throw new Error(data.errors)
     }
   } else {
-    return ["An error occurred. Please try again."];
+    throw new Error(["An error occured. Please try again."]);
   }
 };
 
@@ -73,10 +73,10 @@ export const updateExercise = (name, description, id) => async (dispatch) => {
   } else if (response.status < 500) {
     const data = await response.json();
     if (data.errors) {
-      return data.errors;
+      throw new Error(data.errors)
     }
   } else {
-    return ["An error occurred. Please try again."];
+    throw new Error(["An error occured. Please try again."]);
   }
 };
 
