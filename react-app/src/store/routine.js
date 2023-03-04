@@ -70,10 +70,36 @@ export const deleteRoutine = (id) => async (dispatch) => {
   }
 };
 
+export const editRoutine = (name, description, id) => async (dispatch) => {
+  const response = await fetch(`/api/routines/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name,
+      description,
+    }),
+  });
+  if (response.ok) {
+    const data = await response.json();
+    dispatch(setRoutine(data));
+    return data;
+  } else if (response.status < 500) {
+    const data = await response.json();
+    if (data.errors) {
+      throw new Error(data.errors)
+    }
+  } else {
+    throw new Error(["An error occured. Please try again."]);
+  }
+};
+
 const routineReducer = (state = {}, action) => {
   switch (action.type) {
     case SET_ROUTINE: {
-      const newState = { ...action.payload };
+      //This has the effect of overwriting the state with the payload, but keeping data that is not overwritten by incoming data. This prevents issues with editing name & description vs routine_exercises in different routes
+      const newState = {...state, ...action.payload };
       return newState;
     }
     case REMOVE_ROUTINE:{

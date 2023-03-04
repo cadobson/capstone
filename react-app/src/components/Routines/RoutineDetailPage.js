@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from "react-redux"
 import { useState, useEffect } from "react"
 import { deleteRoutine, getRoutine } from "../../store/routine"
 import RoutineExerciseBlock from "./RoutineExerciseBlock"
+import { useModal } from "../../context/Modal"
+import EditRoutineModal from "./EditRoutineModal"
 
 const RoutineDetailPage = () => {
   const id = useParams().id
@@ -29,6 +31,11 @@ const RoutineDetailPage = () => {
     .then(() => {history.push("/routines")})
   }
 
+  const {setModalContent} = useModal()
+  const handleOpenEditRoutineModal = () => {
+    setModalContent(<EditRoutineModal routineData={routineData} />)
+  }
+
   return (
     <>
       {isLoaded && (
@@ -47,7 +54,7 @@ const RoutineDetailPage = () => {
               {showOwnerButtons && (
                 <>
                   <button className="delete-routine-button" onClick={handleDeleteRoutine}>Delete Routine</button>
-                  <button className="edit-routine-button">Edit Routine</button>
+                  <button className="edit-routine-button" onClick={handleOpenEditRoutineModal}>Edit Routine</button>
                 </>
               )}
             </div>
