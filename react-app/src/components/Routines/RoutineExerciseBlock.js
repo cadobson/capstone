@@ -12,7 +12,7 @@ const RoutineExerciseBlock = ({routineExercise}) => {
       {instructions && (
         <div>Instructions: {instructions}</div>
       )}
-      
+
     </div>
   )
 }

@@ -38,7 +38,7 @@ const CreateRoutineExerciseModal = ({routineData}) => {
 
   return (
     <>
-      <h1>Create a New Routine Exercise</h1>
+      <h1>Add a Step</h1>
       <form onSubmit={handleSubmit}>
         <ul>
           {errors.map((error, idx) => (
