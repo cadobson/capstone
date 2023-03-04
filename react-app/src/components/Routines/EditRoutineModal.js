@@ -30,9 +30,8 @@ const EditRoutineModal = ({routineData}) => {
     dispatch(editRoutine(name, description, routineData.id))
       .then(() => {history.push(`/routines/${routineData.id}`)})
       .then(() => {closeModal()})
-      .catch(async (res) => {
-        const data = await res.json()
-        if (data && data.errors) setErrors(data.errors)
+      .catch((errors) => {
+        if (errors) setErrors(errors.message.split(","))
       })
   }
 

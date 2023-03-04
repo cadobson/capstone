@@ -8,7 +8,7 @@ import { createRoutine } from "../../store/routine"
 const CreateRoutineModal = () => {
   const dispatch = useDispatch()
   const history = useHistory()
-  
+
   const [name, setName] = useState()
   const [description, setDescription] = useState()
 
@@ -32,9 +32,8 @@ const CreateRoutineModal = () => {
     dispatch(createRoutine(name, description))
       .then((data) => {history.push(`/routines/${data.id}`)})
       .then(() => closeModal())
-      .catch(async (res) => {
-        const data = await res.json()
-        if (data && data.errors) setErrors(data.errors)
+      .catch((errors) => {
+        if (errors) setErrors(errors.message.split(","))
       })
     }
 

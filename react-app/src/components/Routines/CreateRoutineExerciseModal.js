@@ -30,11 +30,9 @@ const CreateRoutineExerciseModal = ({routineData}) => {
     }
 
     dispatch(addExerciseToRoutine(routineId, exerciseId, setsRepsArray, instructions))
-      // .then((data) => {history.push(`/routines/${data.id}`)})
       .then(() => closeModal())
-      .catch(async (errors) => {
-        console.log("errors", errors.message)
-        if (errors) setErrors([errors.message])
+      .catch((errors) => {
+        if (errors) setErrors(errors.message.split(","))
       })
   }
 
@@ -77,7 +75,7 @@ const CreateRoutineExerciseModal = ({routineData}) => {
             required
           />
         </label>
-        <button type="submit">Create Routine Exercise</button>
+        <button type="submit">Add Step to Routine</button>
       </form>
     </>
   )

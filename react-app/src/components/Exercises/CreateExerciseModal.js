@@ -32,9 +32,8 @@ function CreateExerciseModal() {
     dispatch(createExercise(name, description))
       .then((data) => {history.push(`/exercises/${data.id}`)})
       .then(() => closeModal())
-      .catch(async (res) => {
-        const data = await res.json()
-        if (data && data.errors) setErrors(data.errors)
+      .catch((errors) => {
+        if (errors) setErrors(errors.message.split(","))
       })
   }
 
