@@ -1,6 +1,7 @@
 const SET_ROUTINE = "routines/SET_ROUTINE";
 const REMOVE_ROUTINE = "routines/REMOVE_ROUTINE";
 const ADD_EXERCISE_ROUTINE = "routines/ADD_EXERCISE_ROUTINE";
+const REMOVE_EXERCISE_ROUTINE = "routines/REMOVE_EXERCISE_ROUTINE";
 
 const setRoutine = (routine) => ({
   type: SET_ROUTINE,
@@ -15,6 +16,11 @@ const removeRoutine = (routine) => ({
 const addRoutineExercise = (routineExercise) => ({
   type: ADD_EXERCISE_ROUTINE,
   payload: routineExercise,
+});
+
+const removeRoutineExercise = (routineExerciseId) => ({
+  type: REMOVE_EXERCISE_ROUTINE,
+  payload: routineExerciseId,
 });
 
 export const getRoutine = (id) => async (dispatch) => {
@@ -127,6 +133,25 @@ export const addExerciseToRoutine = (routineId, exerciseId, instructions, setsRe
   }
 };
 
+export const deleteExerciseFromRoutine = (routineId, routineExerciseId) => async (dispatch) => {
+  const response = await fetch(`/api/routines/${routineId}/routine_exercise/${routineExerciseId}`, {
+    method: "DELETE",
+  });
+  if (response.ok) {
+    const data = await response.json();
+    // dispatch(getRoutine(routineId));
+    dispatch(removeRoutineExercise(routineExerciseId));
+    return data;
+  } else if (response.status < 500) {
+    const data = await response.json();
+    if (data.errors) {
+      throw new Error(data.errors)
+    }
+  } else {
+    throw new Error(["An error occured. Please try again."]);
+  }
+};
+
 const routineReducer = (state = {}, action) => {
   switch (action.type) {
     case SET_ROUTINE: {
@@ -140,8 +165,15 @@ const routineReducer = (state = {}, action) => {
       newState.Routine_Exercise.push(action.payload);
       return newState;
     }
+    case REMOVE_EXERCISE_ROUTINE: {
+      const newState = { ...state };
+      const routineExerciseId = action.payload;
+      const routineExerciseIndex = newState.Routine_Exercise.findIndex((routineExercise) => routineExercise.id === routineExerciseId);
+      newState.Routine_Exercise.splice(routineExerciseIndex, 1);
+      return newState;
+    }
     case REMOVE_ROUTINE:{
-      const newState = { ...action.payload };
+      // const newState = { ...action.payload };
       return {};
     }
     default: {
