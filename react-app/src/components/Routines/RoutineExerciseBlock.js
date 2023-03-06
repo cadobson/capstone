@@ -1,6 +1,8 @@
 import { useDispatch } from "react-redux"
 import { Link } from "react-router-dom"
+import { useModal } from "../../context/Modal"
 import { deleteExerciseFromRoutine } from "../../store/routine"
+import EditExerciseRoutineModal from "./EditExerciseRoutineModal"
 
 
 const RoutineExerciseBlock = ({routineExercise, enableDelete, enableEdit, routineId}) => {
@@ -10,7 +12,12 @@ const RoutineExerciseBlock = ({routineExercise, enableDelete, enableEdit, routin
   const handleDeleteRoutineExercise = (e) => {
     e.preventDefault()
     dispatch(deleteExerciseFromRoutine(routineId, routineExercise.id))
+  }
 
+  const {setModalContent} = useModal()
+  const handleOpenEditRoutineExerciseModal = (e) => {
+    e.preventDefault()
+    setModalContent(<EditExerciseRoutineModal routineExerciseData={routineExercise} routineId={routineId} />)
   }
 
   return (
@@ -25,12 +32,12 @@ const RoutineExerciseBlock = ({routineExercise, enableDelete, enableEdit, routin
       </div>
       <div className="routine-exercise-block-right-side">
         {enableDelete && (
-          <button className="routine-exercise-delete-button" onClick={handleDeleteRoutineExercise}>
+          <button className="routine-exercise-delete-button" onClick={handleOpenEditRoutineExerciseModal}>
           <i className="fas fa-trash" />
         </button>
         )}
         {enableEdit && (
-          <button className="routine-exercise-edit-button">
+          <button className="routine-exercise-edit-button" onClick={handleOpenEditRoutineExerciseModal}>
             <i className="fas fa-edit" />
           </button>
         )}

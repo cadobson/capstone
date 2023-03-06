@@ -152,6 +152,31 @@ export const deleteExerciseFromRoutine = (routineId, routineExerciseId) => async
   }
 };
 
+export const editExerciseInRoutine = (routineId, routineExerciseId, instructions, setsRepsArray) => async (dispatch) => {
+  const response = await fetch(`/api/routines/${routineId}/routine_exercise/${routineExerciseId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      sets_reps_array: setsRepsArray,
+      instructions,
+    }),
+  });
+  if (response.ok) {
+    const data = await response.json();
+    dispatch(getRoutine(routineId));
+    return data;
+  } else if (response.status < 500) {
+    const data = await response.json();
+    if (data.errors) {
+      throw new Error(data.errors)
+    }
+  } else {
+    throw new Error(["An error occured. Please try again."]);
+  }
+};
+
 const routineReducer = (state = {}, action) => {
   switch (action.type) {
     case SET_ROUTINE: {
