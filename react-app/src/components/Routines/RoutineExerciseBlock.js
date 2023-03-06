@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import { deleteExerciseFromRoutine } from "../../store/routine"
 
 
-const RoutineExerciseBlock = ({routineExercise, enableDelete, routineId}) => {
+const RoutineExerciseBlock = ({routineExercise, enableDelete, enableEdit, routineId}) => {
   const {order, Exercise, exercise_id, sets_reps_array, instructions} = routineExercise
   const dispatch = useDispatch()
 
@@ -28,6 +28,11 @@ const RoutineExerciseBlock = ({routineExercise, enableDelete, routineId}) => {
           <button className="routine-exercise-delete-button" onClick={handleDeleteRoutineExercise}>
           <i className="fas fa-trash" />
         </button>
+        )}
+        {enableEdit && (
+          <button className="routine-exercise-edit-button">
+            <i className="fas fa-edit" />
+          </button>
         )}
       </div>
 

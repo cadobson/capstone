@@ -13,6 +13,7 @@ const RoutineDetailPage = () => {
   const [isLoaded, setIsLoaded] = useState(false)
   const [display404, setDisplay404] = useState(false)
   const [enableDelete, setEnableDelete] = useState(false)
+  const [enableEdit, setEnableEdit] = useState(false)
 
   const currentSessionUser = useSelector(state => state.session.user)
   const showOwnerButtons = currentSessionUser && currentSessionUser.id === routineData.creator_id
@@ -52,7 +53,7 @@ const RoutineDetailPage = () => {
               <div className="routine-detail-description">{routineData.description}</div>
               This routine has {routineData.Routine_Exercise.length} exercises.
               {routineData.Routine_Exercise.map((routineExercise) => (
-                <RoutineExerciseBlock routineExercise={routineExercise} key={routineExercise.id} enableDelete={enableDelete} routineId={id} />
+                <RoutineExerciseBlock routineExercise={routineExercise} key={routineExercise.id} enableDelete={enableDelete} enableEdit={enableEdit} routineId={id} />
               ))}
             </div>
             <div className="routine-detail-sidebar">
@@ -63,6 +64,7 @@ const RoutineDetailPage = () => {
                   <button className="edit-routine-button" onClick={handleOpenEditRoutineModal}>Edit Routine</button>
                   <button className="create-routine-exercise-button" onClick={handleOpenCreateRoutineExerciseModal}>Add a Step</button>
                   <button className="delete-routine-exercise-button" onClick={() => {setEnableDelete(!enableDelete)}}>Delete a Step</button>
+                  <button className="edit-routine-exercise-button" onClick={() => {setEnableEdit(!enableEdit)}}>Edit a Step</button>
                 </>
               )}
             </div>
