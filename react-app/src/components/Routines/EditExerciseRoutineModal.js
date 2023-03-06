@@ -17,7 +17,6 @@ const EditExerciseRoutineModal = ({routineExerciseData, routineId}) => {
 
     setErrors([])
     const newErrors = []
-    if (instructions.length < 1) newErrors.push("Instructions must not be empty")
     if (setsRepsArray.length < 1) newErrors.push("Sets and Reps must not be empty")
     if (instructions.length > 9999) newErrors.push("Instructions must not be more than 10000 characters")
     if (setsRepsArray.length > 255) newErrors.push("Sets and Reps must not be more than 255 characters")
@@ -50,13 +49,12 @@ const EditExerciseRoutineModal = ({routineExerciseData, routineId}) => {
             type="text"
             value={instructions}
             onChange={(e) => setInstructions(e.target.value)}
-            required
           />
         </label>
         <label>
           Sets and Reps:
           <input
-            placeholder="Sets and Reps"
+            placeholder="5x5 90 seconds rest"
             type="text"
             value={setsRepsArray}
             onChange={(e) => setSetsRepsArray(e.target.value)}

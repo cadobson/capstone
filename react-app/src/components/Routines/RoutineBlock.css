@@ -23,7 +23,7 @@
   white-space: pre-line;
 }
 
-.delete-routine-button, .edit-routine-button, .create-routine-exercise-button, .delete-routine-exercise-button {
+.delete-routine-button, .edit-routine-button, .create-routine-exercise-button, .delete-routine-exercise-button, .edit-routine-exercise-button, .reorder-routine-exercise-button {
   width: 200px;
   margin: 1px;
 }
@@ -41,6 +41,8 @@
 
 .routine-exercise-block-left-side, .routine-exercise-block-right-side {
   border: 1px solid blue;
+  display: flex;
+  flex-direction: column;
 }
 
 .routine-exercise-block-left-side {
@@ -51,4 +53,8 @@
 .routine-exercise-block-right-side {
   width: auto;
   margin-left: 4px;
+}
+
+.routine-exercise-delete-button, .routine-exercise-edit-button, .routine-exercise-swap-up-button, .routine-exercise-swap-down-button {
+  width: 60px;
 }

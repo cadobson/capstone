@@ -58,7 +58,7 @@ const CreateRoutineExerciseModal = ({routineData}) => {
         <label>
           Sets and Reps:
           <input
-            placeholder="Sets and Reps"
+            placeholder="5x5 90 seconds rest"
             type="text"
             value={setsRepsArray}
             onChange={(e) => setSetsRepsArray(e.target.value)}
