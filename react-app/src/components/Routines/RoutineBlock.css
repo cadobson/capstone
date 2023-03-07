@@ -40,7 +40,7 @@
 }
 
 .routine-exercise-block-left-side, .routine-exercise-block-right-side {
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
   display: flex;
   flex-direction: column;
 }
