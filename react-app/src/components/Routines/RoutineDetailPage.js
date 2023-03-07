@@ -72,7 +72,7 @@ const RoutineDetailPage = () => {
               <div className="routine-detail-description">{routineData.description}</div>
               This routine has {routineData.Routine_Exercise.length} exercises.
               {routineData.Routine_Exercise.map((routineExercise) => (
-                <RoutineExerciseBlock routineExercise={routineExercise} key={routineExercise.id} enableDelete={enableDelete} enableEdit={enableEdit} enableReorder={enableReorder} totalRoutineExercises={routineData.Routine_Exercise.length} routineId={id} />
+                <RoutineExerciseBlock routineExercise={routineExercise} key={routineExercise.id} enableDelete={enableDelete} enableEdit={enableEdit} enableReorder={enableReorder} routineId={id} />
               ))}
             </div>
             <div className="routine-detail-sidebar">

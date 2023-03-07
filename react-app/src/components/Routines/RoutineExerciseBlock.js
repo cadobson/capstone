@@ -6,10 +6,11 @@ import { deleteExerciseFromRoutine, swapRoutineExercises } from "../../store/rou
 import EditExerciseRoutineModal from "./EditExerciseRoutineModal"
 
 
-const RoutineExerciseBlock = ({routineExercise, enableDelete, enableEdit, routineId, enableReorder, totalRoutineExercises}) => {
+const RoutineExerciseBlock = ({routineExercise, enableDelete, enableEdit, routineId, enableReorder}) => {
   const {order, Exercise, exercise_id, sets_reps_array, instructions} = routineExercise
   const [errors, setErrors] = useState([])
   const Routine_Exercise_Array = useSelector(state => state.routine.Routine_Exercise)
+  const totalRoutineExercises = Routine_Exercise_Array.length
   const dispatch = useDispatch()
 
   const handleDeleteRoutineExercise = (e) => {
