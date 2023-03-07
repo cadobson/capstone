@@ -190,7 +190,26 @@ export const swapRoutineExercises = (routineId, routineExerciseId1, routineExerc
   });
   if (response.ok) {
     const data = await response.json();
+    //TODO: handle this locally instead of reloading the entire routine
     dispatch(getRoutine(routineId));
+    return data;
+  } else if (response.status < 500) {
+    const data = await response.json();
+    if (data.errors) {
+      throw new Error(data.errors)
+    }
+  } else {
+    throw new Error(["An error occured. Please try again."]);
+  }
+};
+
+export const copyRoutine = (routineId) => async (dispatch) => {
+  const response = await fetch(`/api/routines/${routineId}/copy`, {
+    method: "POST",
+  });
+  if (response.ok) {
+    const data = await response.json();
+    dispatch(setRoutine(data));
     return data;
   } else if (response.status < 500) {
     const data = await response.json();

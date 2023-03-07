@@ -32,7 +32,8 @@ def get_routines_public():
 
 @routine_routes.route('/<int:id>', methods=['GET'])
 def get_routine(id):
-    routine = Routine.query.options(joinedload(Routine.creator)).filter(Routine.id == id).first()
+    routine = Routine.query.options(joinedload(
+        Routine.creator)).filter(Routine.id == id).first()
 
     if not routine:
         return {
@@ -278,7 +279,7 @@ def copy_routine(id):
 
     # Create a new routine
     new_routine = Routine(
-        name=routine.name,
+        name=f"{current_user.username}'s copy of {routine.name}",
         description=routine.description,
         public=False,
         creator_id=current_user.id

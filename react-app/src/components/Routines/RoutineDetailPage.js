@@ -1,7 +1,7 @@
 import { useParams, useHistory } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import { useState, useEffect } from "react"
-import { deleteRoutine, getRoutine } from "../../store/routine"
+import { copyRoutine, deleteRoutine, getRoutine } from "../../store/routine"
 import RoutineExerciseBlock from "./RoutineExerciseBlock"
 import { useModal } from "../../context/Modal"
 import EditRoutineModal from "./EditRoutineModal"
@@ -62,6 +62,12 @@ const RoutineDetailPage = () => {
     setModalContent(<CreateRoutineExerciseModal routineData={routineData} />)
   }
 
+  const handleCopyRoutine = (e) => {
+    e.preventDefault()
+    dispatch(copyRoutine(id))
+    .then((newRoutine) => {history.push(`/routines/${newRoutine.id}`)})
+  }
+
   return (
     <>
       {isLoaded && (
@@ -85,6 +91,11 @@ const RoutineDetailPage = () => {
                   <button className="delete-routine-exercise-button" onClick={toggleOwnerButtonsShowDelete}>Delete a Step</button>
                   <button className="edit-routine-exercise-button" onClick={toggleOwnerButtonsShowEdit}>Edit a Step</button>
                   <button className="reorder-routine-exercise-button" onClick={toggleOwnerButtonsShowReorder}>Reorder Steps</button>
+                </>
+              )}
+              {!showOwnerButtons && (
+                <>
+                  <button className="copy-routine-button" onClick={handleCopyRoutine}>Copy Routine</button>
                 </>
               )}
             </div>
