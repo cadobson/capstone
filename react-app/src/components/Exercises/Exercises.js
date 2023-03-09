@@ -45,9 +45,15 @@ const Exercises = () => {
     <>
       <h1>Exercises</h1>
       <div className="load-exercises-button-container">
-        <button className="load-exercises-button" onClick={handleLoadPublicExercises}>All Public Exercises</button>
-        {currentSessionUser && <button className="load-exercises-button" onClick={handleLoadPrivateExercises}>My Exercises</button>}
-        <button className="create-exercise-button" onClick={handleOpenCreateExerciseModal}>Create a New Exercise</button>
+        <button className="load-exercises-button" onClick={handleLoadPublicExercises}>View All Public Exercises</button>
+        {currentSessionUser && (
+          <>
+            <button className="load-exercises-button" onClick={handleLoadPrivateExercises}>View My Exercises</button>
+            <button className="create-exercise-button" onClick={handleOpenCreateExerciseModal}>Create a New Exercise</button>
+          </>
+
+        )}
+
       </div>
       {showPrivateHeader && (
         <>

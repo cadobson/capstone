@@ -93,7 +93,7 @@ const RoutineDetailPage = () => {
                   <button className="reorder-routine-exercise-button" onClick={toggleOwnerButtonsShowReorder}>Reorder Steps</button>
                 </>
               )}
-              {!showOwnerButtons && (
+              {!showOwnerButtons && currentSessionUser && (
                 <>
                   <button className="copy-routine-button" onClick={handleCopyRoutine}>Copy Routine</button>
                 </>

@@ -45,8 +45,14 @@ const Routines = () => {
       <h1>Routines</h1>
       <div className="load-routines-button-container">
         <button className="load-routines-button" onClick={handleLoadPublicRoutines}>All Public Routines</button>
-        {currentSessionUser && <button className="load-routines-button" onClick={handleLoadPrivateRoutines}>My Routines</button>}
-        <button className="create-routine-button" onClick={handleOpenCreateRoutineModal}>Create a New Routine</button>
+        {currentSessionUser && (
+          <>
+            <button className="load-routines-button" onClick={handleLoadPrivateRoutines}>My Routines</button>
+            <button className="create-routine-button" onClick={handleOpenCreateRoutineModal}>Create a New Routine</button>
+          </>
+
+        )}
+
       </div>
       {showPrivateHeader && (
         <>
