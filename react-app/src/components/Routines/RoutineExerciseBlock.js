@@ -7,7 +7,7 @@ import EditExerciseRoutineModal from "./EditExerciseRoutineModal"
 
 
 const RoutineExerciseBlock = ({routineExercise, enableDelete, enableEdit, routineId, enableReorder}) => {
-  const {order, Exercise, exercise_id, sets_reps_array, instructions} = routineExercise
+  const {order, Exercise, exercise_id, instructions, target_reps_count, target_sets_count, rest_seconds} = routineExercise
   const [errors, setErrors] = useState([])
   const Routine_Exercise_Array = useSelector(state => state.routine.Routine_Exercise)
   const totalRoutineExercises = Routine_Exercise_Array.length
@@ -48,7 +48,7 @@ const RoutineExerciseBlock = ({routineExercise, enableDelete, enableEdit, routin
       <div className="routine-exercise-block-left-side">
         <h2>Step {order}: {Exercise.name}</h2>
         <div><Link to={`/exercises/${exercise_id}`}>View Exercise Detail Page</Link></div>
-        <div>Sets/Reps/Rest: {sets_reps_array}</div>
+        <div>Sets/Reps/Rest: {`${target_sets_count}x${target_reps_count} ${rest_seconds} seconds`}</div>
         {instructions && (
           <div>Instructions: {instructions}</div>
         )}

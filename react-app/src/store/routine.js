@@ -107,7 +107,7 @@ export const editRoutine = (name, description, id) => async (dispatch) => {
   }
 };
 
-export const addExerciseToRoutine = (routineId, exerciseId, instructions, setsRepsArray) => async (dispatch) => {
+export const addExerciseToRoutine = (routineId, exerciseId, instructions, targetSetsCount, targetRepsCount, restSeconds) => async (dispatch) => {
   const response = await fetch(`/api/routines/${routineId}`, {
     method: "POST",
     headers: {
@@ -115,8 +115,10 @@ export const addExerciseToRoutine = (routineId, exerciseId, instructions, setsRe
     },
     body: JSON.stringify({
       exercise_id: exerciseId,
-      sets_reps_array: setsRepsArray,
       instructions,
+      target_sets_count: targetSetsCount,
+      target_reps_count: targetRepsCount,
+      rest_seconds: restSeconds,
     }),
   });
   if (response.ok) {
@@ -152,14 +154,16 @@ export const deleteExerciseFromRoutine = (routineId, routineExerciseId) => async
   }
 };
 
-export const editExerciseInRoutine = (routineId, routineExerciseId, instructions, setsRepsArray) => async (dispatch) => {
+export const editExerciseInRoutine = (routineId, routineExerciseId, instructions, targetSetsCount, targetRepsCount, restSeconds) => async (dispatch) => {
   const response = await fetch(`/api/routines/${routineId}/routine_exercise/${routineExerciseId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      sets_reps_array: setsRepsArray,
+      target_sets_count: targetSetsCount,
+      target_reps_count: targetRepsCount,
+      rest_seconds: restSeconds,
       instructions,
     }),
   });
