@@ -24,14 +24,26 @@ class EditRoutineForm(FlaskForm):
 
 class CreateRoutineExerciseForm(FlaskForm):
     exercise_id = IntegerField('exercise_id', validators=[DataRequired()])
-    sets_reps_array = StringField(
-        'sets_reps_array', validators=[DataRequired()])
+    # sets_reps_array = StringField(
+    #     'sets_reps_array', validators=[DataRequired()])
+    target_sets_count = IntegerField(
+        'target_sets_count', validators=[DataRequired()])
+    target_reps_count = IntegerField(
+        'target_reps_count', validators=[DataRequired()])
+    rest_seconds = IntegerField(
+        'rest_seconds', validators=[DataRequired()])
     instructions = StringField('instructions')
 
 
 class EditRoutineExerciseForm(FlaskForm):
-    sets_reps_array = StringField(
-        'sets_reps_array', validators=[DataRequired()])
+    # sets_reps_array = StringField(
+    #     'sets_reps_array', validators=[DataRequired()])
+    target_sets_count = IntegerField(
+        'target_sets_count', validators=[DataRequired()])
+    target_reps_count = IntegerField(
+        'target_reps_count', validators=[DataRequired()])
+    rest_seconds = IntegerField(
+        'rest_seconds', validators=[DataRequired()])
     instructions = StringField('instructions')
 
 

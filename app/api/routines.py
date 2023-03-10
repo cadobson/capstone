@@ -181,17 +181,20 @@ def create_routine_exercise(id):
         routine_exercise = RoutineExercise(
             routine_id=id,
             exercise_id=data['exercise_id'],
-            sets_reps_array=data['sets_reps_array'],
+            # sets_reps_array=data['sets_reps_array'],
             instructions=data['instructions'],
             creator_id=current_user.id,
-            order=number_of_routine_exercises + 1
+            order=number_of_routine_exercises + 1,
+            target_sets_count=data['target_sets_count'],
+            target_reps_count=data['target_reps_count'],
+            rest_seconds=data['rest_seconds'],
         )
         db.session.add(routine_exercise)
         db.session.commit()
         return routine_exercise.to_dict()
     return {'errors': validation_errors_to_error_messages(form.errors)}, 401
 
-# Edit the instructions or sets_reps_array of a routine_exercise
+# Edit the instructions, sets, reps, or time of a routine_exercise
 
 
 @routine_routes.route('/<int:id>/routine_exercise/<int:routine_exercise_id>', methods=['PUT'])
@@ -215,7 +218,10 @@ def edit_routine_exercise(id, routine_exercise_id):
 
         if routine_exercise.creator_id == current_user.id:
             routine_exercise.instructions = data['instructions']
-            routine_exercise.sets_reps_array = data['sets_reps_array']
+            # routine_exercise.sets_reps_array = data['sets_reps_array']
+            routine_exercise.target_sets_count = data['target_sets_count']
+            routine_exercise.target_reps_count = data['target_reps_count']
+            routine_exercise.rest_seconds = data['rest_seconds']
             db.session.commit()
             return routine_exercise.to_dict()
         return {'errors': ['Unauthorized']}, 401
@@ -294,10 +300,13 @@ def copy_routine(id):
         new_routine_exercise = RoutineExercise(
             routine_id=new_routine.id,
             exercise_id=routine_exercise.exercise_id,
-            sets_reps_array=routine_exercise.sets_reps_array,
+            # sets_reps_array=routine_exercise.sets_reps_array,
             instructions=routine_exercise.instructions,
             creator_id=current_user.id,
-            order=routine_exercise.order
+            order=routine_exercise.order,
+            target_sets_count=routine_exercise.target_sets_count,
+            target_reps_count=routine_exercise.target_reps_count,
+            rest_seconds=routine_exercise.rest_seconds,
         )
         db.session.add(new_routine_exercise)
     db.session.commit()
