@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from app.api.auth_routes import validation_errors_to_error_messages
-# from app.forms...
+from app.forms.workout_form import CreateWorkoutSessionForm, EditWorkoutSessionForm
 from app.models import db, WorkoutSession, User, Exercise, WorkoutSessionStep, WorkoutSessionStepResult, Routine, RoutineExercise
 from sqlalchemy.orm import joinedload
 from flask_login import current_user
@@ -48,8 +48,21 @@ def get_workout_session(id):
 
 @workout_session_routes.route('/', methods=['POST'])
 def create_workout_session():
-    if current_user.is_authenticated:
+    if not current_user.is_authenticated:
+        return {'errors': ['Unauthorized']}, 401
+
+    form = CreateWorkoutSessionForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+    if form.validate_on_submit():
         data = request.get_json()
+        # Check if the routine exists, and if the current user is the creator of the routine
+        routine = Routine.query.filter(
+            Routine.id == data['routine_id']).first()
+        if not routine:
+            return {'errors': ['Routine not found']}, 404
+        if routine.creator_id != current_user.id:
+            return {'errors': ['Unauthorized']}, 401
+
         workout_session = WorkoutSession(
             routine_id=data['routine_id'],
             notes="",
@@ -75,5 +88,43 @@ def create_workout_session():
             db.session.add(workout_session_step)
             db.session.commit()
         return {"workout_session": workout_session.to_dict()}
-    else:
+    return {'errors': validation_errors_to_error_messages(form.errors)}, 401
+
+# Update a workout session. This will update the notes field only.
+
+
+@workout_session_routes.route('/<int:id>', methods=['PUT'])
+def update_workout_session(id):
+    if not current_user.is_authenticated:
         return {'errors': ['Unauthorized']}, 401
+    form = EditWorkoutSessionForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+    if form.validate_on_submit():
+        data = request.get_json()
+        workout_session = WorkoutSession.query.filter(
+            WorkoutSession.id == id).first()
+        if not workout_session:
+            return {'errors': ['Workout session not found']}, 404
+        if workout_session.creator_id != current_user.id:
+            return {'errors': ['Unauthorized']}, 401
+        workout_session.notes = data['notes']
+        db.session.commit()
+        return {"workout_session": workout_session.to_dict()}
+    return {'errors': validation_errors_to_error_messages(form.errors)}, 401
+
+# Delete a workout session. This will delete the workout session and all of its steps and results.
+
+
+@workout_session_routes.route('/<int:id>', methods=['DELETE'])
+def delete_workout_session(id):
+    if not current_user.is_authenticated:
+        return {'errors': ['Unauthorized']}, 401
+    workout_session = WorkoutSession.query.filter(
+        WorkoutSession.id == id).first()
+    if not workout_session:
+        return {'errors': ['Workout session not found']}, 404
+    if workout_session.creator_id != current_user.id:
+        return {'errors': ['Unauthorized']}, 401
+    db.session.delete(workout_session)
+    db.session.commit()
+    return {"workout_session": workout_session.to_dict()}

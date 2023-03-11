@@ -16,7 +16,7 @@ class WorkoutSession(db.Model):
     date = db.Column(db.DateTime, nullable=False)
 
     workout_session_steps = db.relationship(
-        "WorkoutSessionStep", back_populates="workout_session")
+        "WorkoutSessionStep", back_populates="workout_session", cascade="all, delete-orphan")
     creator = db.relationship("User", back_populates="workout_sessions")
     routine = db.relationship("Routine", back_populates="workout_sessions")
 
@@ -56,7 +56,7 @@ class WorkoutSessionStep(db.Model):
     exercise = db.relationship(
         "Exercise", back_populates="workout_session_steps")
     workout_session_step_results = db.relationship(
-        "WorkoutSessionStepResult", back_populates="workout_session_step")
+        "WorkoutSessionStepResult", back_populates="workout_session_step", cascade="all, delete-orphan")
 
     def to_dict(self):
         return {
