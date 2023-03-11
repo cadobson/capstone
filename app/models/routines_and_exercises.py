@@ -17,6 +17,8 @@ class Exercise(db.Model):
 
     creator = db.relationship("User", back_populates="exercises")
     routines = db.relationship("RoutineExercise", back_populates="exercises")
+    workout_session_steps = db.relationship(
+        "WorkoutSessionStep", back_populates="exercise")
 
     def to_dict(self):
         return {
@@ -44,6 +46,8 @@ class Routine(db.Model):
 
     creator = db.relationship("User", back_populates="routines")
     exercises = db.relationship("RoutineExercise", back_populates="routines")
+    workout_sessions = db.relationship("WorkoutSession",
+                                       back_populates="routine", cascade="all, delete-orphan")
 
     def to_dict(self):
         return {

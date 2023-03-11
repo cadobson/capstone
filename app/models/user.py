@@ -16,9 +16,10 @@ class User(db.Model, UserMixin):
 
     routines = db.relationship("Routine",
                                back_populates="creator", cascade="all, delete-orphan")
-
     exercises = db.relationship("Exercise",
                                 back_populates="creator", cascade="all, delete-orphan")
+    workout_sessions = db.relationship("WorkoutSession",
+                                       back_populates="creator", cascade="all, delete-orphan")
 
     @property
     def password(self):
