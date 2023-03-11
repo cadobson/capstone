@@ -127,4 +127,4 @@ def delete_workout_session(id):
         return {'errors': ['Unauthorized']}, 401
     db.session.delete(workout_session)
     db.session.commit()
-    return {"workout_session": workout_session.to_dict()}
+    return {"message": "delete successful"}, 200
