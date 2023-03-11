@@ -52,13 +52,14 @@ function Navigation({ isLoaded }){
       <NavLink exact to="/">Home</NavLink>
       <NavLink to="/exercises">Exercises</NavLink>
       <NavLink to="/routines">Routines</NavLink>
+      {isLoaded && sessionUser && <NavLink to="/workout-sessions">Workout Sessions</NavLink>}
 
       {isLoaded && sessionLinks}
 
 			{isLoaded && (
         <>
 
-          <ProfileButton user={sessionUser} />
+          {/* <ProfileButton user={sessionUser} /> */}
         </>
 
 
