@@ -7,7 +7,6 @@ class WorkoutSession(db.Model):
         __table_args__ = {'schema': SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255), nullable=False)
     public = db.Column(db.Boolean, nullable=False)
     creator_id = db.Column(db.Integer, db.ForeignKey(
         add_prefix_for_prod("users.id")), nullable=False)
@@ -24,14 +23,13 @@ class WorkoutSession(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'name': self.name,
             'public': self.public,
             'creator_id': self.creator_id,
             'routine_id': self.routine_id,
             'creator': self.creator.to_dict(),
             'routine': self.routine.to_dict(),
             'notes': self.notes,
-            'date': self.date
+            'date': self.date,
         }
 
 
@@ -71,8 +69,8 @@ class WorkoutSessionStep(db.Model):
             'rest_seconds': self.rest_seconds,
             'order': self.order,
             'creator_id': self.creator_id,
-            'workout_session': self.workout_session.to_dict(),
-            'exercise': self.exercise.to_dict()
+            # 'workout_session': self.workout_session.to_dict(),
+            'exercise': self.exercise.to_dict_without_description()
         }
 
 

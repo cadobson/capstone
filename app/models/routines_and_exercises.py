@@ -30,6 +30,15 @@ class Exercise(db.Model):
             'creator_id': self.creator_id
         }
 
+    def to_dict_without_description(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'motion_img_url': self.motion_img_url,
+            'public': self.public,
+            'creator_id': self.creator_id
+        }
+
 
 class Routine(db.Model):
     __tablename__ = 'routines'
