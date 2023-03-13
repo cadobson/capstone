@@ -7,7 +7,6 @@ class WorkoutSession(db.Model):
         __table_args__ = {'schema': SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255), nullable=False)
     public = db.Column(db.Boolean, nullable=False)
     creator_id = db.Column(db.Integer, db.ForeignKey(
         add_prefix_for_prod("users.id")), nullable=False)
@@ -17,21 +16,20 @@ class WorkoutSession(db.Model):
     date = db.Column(db.DateTime, nullable=False)
 
     workout_session_steps = db.relationship(
-        "WorkoutSessionStep", back_populates="workout_session")
+        "WorkoutSessionStep", back_populates="workout_session", cascade="all, delete-orphan")
     creator = db.relationship("User", back_populates="workout_sessions")
     routine = db.relationship("Routine", back_populates="workout_sessions")
 
     def to_dict(self):
         return {
             'id': self.id,
-            'name': self.name,
             'public': self.public,
             'creator_id': self.creator_id,
             'routine_id': self.routine_id,
             'creator': self.creator.to_dict(),
             'routine': self.routine.to_dict(),
             'notes': self.notes,
-            'date': self.date
+            'date': self.date,
         }
 
 
@@ -58,7 +56,7 @@ class WorkoutSessionStep(db.Model):
     exercise = db.relationship(
         "Exercise", back_populates="workout_session_steps")
     workout_session_step_results = db.relationship(
-        "WorkoutSessionStepResult", back_populates="workout_session_step")
+        "WorkoutSessionStepResult", back_populates="workout_session_step", cascade="all, delete-orphan")
 
     def to_dict(self):
         return {
@@ -71,8 +69,8 @@ class WorkoutSessionStep(db.Model):
             'rest_seconds': self.rest_seconds,
             'order': self.order,
             'creator_id': self.creator_id,
-            'workout_session': self.workout_session.to_dict(),
-            'exercise': self.exercise.to_dict()
+            # 'workout_session': self.workout_session.to_dict(),
+            'exercise': self.exercise.to_dict_without_description()
         }
 
 

@@ -9,6 +9,7 @@ import Exercises from "./components/Exercises/Exercises";
 import ExerciseDetailPage from "./components/Exercises/ExerciseDetailPage";
 import Routines from "./components/Routines";
 import RoutineDetailPage from "./components/Routines/RoutineDetailPage";
+import WorkoutSessions from "./components/WorkoutSessions";
 
 function App() {
   const dispatch = useDispatch();
@@ -41,6 +42,9 @@ function App() {
               </Route>
               <Route path="/routines">
                 <Routines />
+              </Route>
+              <Route path="/workout-sessions">
+                <WorkoutSessions />
               </Route>
             </Switch>
           )}

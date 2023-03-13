@@ -12,6 +12,7 @@ from .config import Config
 
 from .api.exercises import exercise_routes
 from .api.routines import routine_routes
+from .api.workout_sessions import workout_session_routes
 
 app = Flask(__name__, static_folder='../react-app/build', static_url_path='/')
 
@@ -34,6 +35,7 @@ app.register_blueprint(auth_routes, url_prefix='/api/auth')
 
 app.register_blueprint(exercise_routes, url_prefix="/api/exercises")
 app.register_blueprint(routine_routes, url_prefix="/api/routines")
+app.register_blueprint(workout_session_routes, url_prefix="/api/workout_sessions")
 
 
 db.init_app(app)
